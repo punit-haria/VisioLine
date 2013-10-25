@@ -4,10 +4,13 @@ import processing.core.*;
 
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
-//	An array of stripes
-	Stripe[] stripes = new Stripe[50];
-	int[][] test;
 
+	int[][] test;
+	private static int xx = 50;
+	private static int yy = 50;
+	private static int _width = 10;
+	private static int _height = 100; 
+	
 	public void setup() {
 		size(500,500);
 		TestData td = new TestData();
@@ -16,17 +19,15 @@ public class Visualizer extends PApplet {
 
 	public void draw() {
 		background(100);
-		// Move and display all "stripes"
-		for (int i = 0; i < stripes.length; i++) {
-			stripes[i].move();
-			stripes[i].display();
-		}
+		noStroke();
+		for(int i = 0; i < test.length; i++){
+			drawStripe(i*3 + xx, test[i][0]);			
+		}		
 	}
 	
-	private void drawStripe(){
-		fill(255,100);
-		noStroke();
-		//rect(x,0,w,parent.height);
+	private void drawStripe(int xcoord, int value){
+		fill(value*25,(10-value)*12,0);		
+		rect(xcoord,yy,_width,_height);
 	}
 	
 }
