@@ -14,7 +14,7 @@ import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-public class File implements Iterable<Line> {
+public class RepoFile implements Iterable<Line> {
 	
 	private String fileName;
 	private String commitId;
@@ -27,7 +27,7 @@ public class File implements Iterable<Line> {
 	 * @param commitId must be a commit within this file's history
 	 * otherwise this function will result in an error.
 	 */
-	public File(FileRepository repo, String name, String commitId) throws GitAPIException, RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException{
+	public RepoFile(FileRepository repo, String name, String commitId) throws GitAPIException, RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException{
 		lines = new ArrayList<Line>();
 		this.fileName = name;
 		this.commitId = commitId;
