@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 import data.CommitIdListGenerator;
 import data.FileListGenerator;
@@ -24,12 +25,13 @@ LinkedList<String> files=filesList.getRelevantPathofFilesByExetension("java");
 for(String s:files){
 	System.out.println(s);
 }
-String realdir="C:/Users/hai/cs410/owncloud/android";
-String fakedir="c:/Users/hai/git/VisioLine/data/listofcommits.txt";// change to your path of listofcommits.txt
-LinkedList<String> commitIds=CommitIdListGenerator.getCommitIds(fakedir);
-for(String s:commitIds)
+ 
+Iterable<RevCommit> commitIds=CommitIdListGenerator.getCommitIds("C:/Users/hai/cs410/owncloud/android");
+int i=0;
+for(RevCommit commit:commitIds)
 {
-	System.out.println(s);
+	i++;
+	System.out.println(i+"  "+commit.getName()+" "+commit.getCommitterIdent().getWhen());
 }
 }
 
