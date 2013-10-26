@@ -3,7 +3,7 @@ package visual.primary;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import data.File;
+import data.RepoFile;
 import data.Line;
 import processing.core.PApplet;
 
@@ -16,7 +16,7 @@ public class FileBar {
 	//collection of LineStripes
 	private ArrayList<LineStripe> stripes;
 
-	public FileBar(PApplet p, File file) {
+	public FileBar(PApplet p, RepoFile file) {
 		this.parent = p;
 		this._width = file.size()*Constants.lineStripeWidth;
 		
