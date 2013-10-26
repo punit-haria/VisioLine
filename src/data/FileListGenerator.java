@@ -2,7 +2,8 @@ package data;
 
 import java.io.File;
 import java.util.LinkedList;
-
+//everytime try to get a list of files in the folder MUST create a new filelistgenerator,
+//dont worry we only use it in project once which is at the beginning
 public class FileListGenerator {
 	final File folder; 
 	LinkedList<String> files;
@@ -25,10 +26,10 @@ public class FileListGenerator {
 		    }
 		 
 	}
-	public LinkedList<String> getFullPathofFiles(){
+	public LinkedList<String> getFullPathofFiles(){//useless method for test purpose
 		return files;
 	}
-	public LinkedList<String> getRelevantPathofFiles(){
+	public LinkedList<String> getRelevantPathofFiles(){//all jgit method need relevant path
 		LinkedList<String> shotPathFiles=new LinkedList<String>();
 		int start=dir.length()+1;
 		
@@ -39,6 +40,7 @@ public class FileListGenerator {
 		return shotPathFiles;
 		
 	}
+	//if you only deal with java file use this parameter is "java"
 	public LinkedList<String> getRelevantPathofFilesByExetension(String fileType){
 		LinkedList<String> shotPathFiles=new LinkedList<String>();
 		int start=dir.length()+1;
