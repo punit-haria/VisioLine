@@ -19,6 +19,7 @@ public class CommitIdListGenerator {
 		File gitWorkDir = new File(dir);
 	    Git git = Git.open(gitWorkDir);
 	    Iterable<RevCommit> commits = git.log().all().call();
+	    
 	  
 		return commits;
 	}
