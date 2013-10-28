@@ -21,7 +21,13 @@ public class FileListGenerator {
 		        if (fileEntry.isDirectory()) {
 		           computeFilesList(fileEntry);
 		        } else {
-		        	 files.add(fileEntry.getPath());
+		        	String s=fileEntry.getPath();
+		        	if(s.contains("\\")){
+		   			 
+		    			s=s.replace("\\", "/");
+		    			}
+		    			if(s.contains("\\")) System.out.println("still");
+		        	 files.add(s);
 		        }
 		    }
 		 
@@ -47,6 +53,7 @@ public class FileListGenerator {
 		 
 		for(String s:files){
 			if(s.substring(s.lastIndexOf('.')+1).equalsIgnoreCase(fileType)){
+					
 			shotPathFiles.add(s.substring(start));
 			}
 			
