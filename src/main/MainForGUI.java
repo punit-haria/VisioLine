@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainForGUI extends Frame {
 	
@@ -20,7 +22,7 @@ public class MainForGUI extends Frame {
 	    panel=new Panel();
 	    
 	    // Set panel background
-	    panel.setBackground(Color.gray);
+	    panel.setBackground(Color.gray); 	 	
 	    
 	    // Create buttons
 	    b1=new Button(); // Create a button with default constructor
@@ -36,7 +38,15 @@ public class MainForGUI extends Frame {
 	    // Add the panel to the frame
 	    add(panel);
 	    
-	    }
+	    addWindowListener(new WindowAdapter(){
+	    	  public void windowClosing(WindowEvent we)
+	    	  {
+	    	  System.exit(0);
+	    	  }
+	    	 });
+	    	 }
+	    
+	    
 	    
 	    public static void main(String args[])
 	    {
