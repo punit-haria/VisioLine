@@ -36,7 +36,7 @@ public class FileBar {
 	}
 
 	// draw bar
-	void display(float xx, float yy) {
+	public void display(float xx, float yy) {
 		Iterator<LineStripe> it = stripes.iterator();
 		float offset = 0;
 		while(it.hasNext()){
