@@ -49,7 +49,7 @@ public class JGitTest {
 		revWalk.setTreeFilter(AndTreeFilter.create(PathFilter.create(filePath),
 				TreeFilter.ANY_DIFF));
 
-		// prints out relavent commits (changed file commits)
+		// prints out relevant commits (changed file commits)
 		for (RevCommit revCommit : revWalk) {
 			System.out.println(revCommit.toObjectId().getName());
 		}
