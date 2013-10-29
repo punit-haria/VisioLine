@@ -2,9 +2,7 @@ package data;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -17,16 +15,11 @@ import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
 public class RepoFile implements Iterable<Line> {
 
 	private String fileName;
 	private String commitId;
-	private HashSet<String> previousCommitIds;
 
 	// change to whatever data structure is most suitable
 	private ArrayList<Line> lines;
@@ -42,8 +35,6 @@ public class RepoFile implements Iterable<Line> {
 		lines = new ArrayList<Line>();
 		this.fileName = name;
 		this.commitId = commitId;
-
-		previousCommitIds = getPreviousCommitIDs(repo);
 		// create list of line objects
 		lines = populateLineInfo(repo);
 	}
@@ -74,31 +65,6 @@ public class RepoFile implements Iterable<Line> {
 		}
 
 		return lines;
-	}
-
-	/*
-	 * Gets all previous commits that file was altered in
-	 */
-	private HashSet<String> getPreviousCommitIDs(FileRepository repo)
-			throws RevisionSyntaxException, MissingObjectException,
-			IncorrectObjectTypeException, AmbiguousObjectException, IOException {
-		HashSet<String> commits = new HashSet<String>();
-
-		RevWalk revWalk = new RevWalk(repo);
-		RevCommit root = revWalk.parseCommit(repo.resolve(commitId));
-		revWalk.markStart(root);
-		revWalk.setTreeFilter(AndTreeFilter.create(PathFilter.create(fileName),
-				TreeFilter.ANY_DIFF));
-
-		// prints out relevant commits (changed file commits)
-		for (RevCommit revCommit : revWalk) {
-			commits.add(revCommit.toObjectId().getName());
-		}
-		return (commits);
-	}
-
-	public boolean prevCommitIdExists(String commitId) {
-		return previousCommitIds.contains(commitId);
 	}
 
 	public int size() {
