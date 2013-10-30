@@ -55,7 +55,7 @@ public class RepoFile implements Iterable<Line> {
 		RawText result = blame.getResultContents();
 		int numberOfLines = result.size();
 		ArrayList<Line> lines = new ArrayList<Line>(numberOfLines);
-
+ 
 		for (int i = 0; i < numberOfLines; ++i) {
 	 
 			RevCommit currentCommit = blame.getSourceCommit(i);
@@ -65,8 +65,9 @@ public class RepoFile implements Iterable<Line> {
 				//if can make a line make it
 			lines.add(new Line(currentCommit.getName(),
 					currentAuthor.getName(), i, result.getString(i)));
-			}else   return lines;//System.out.println("can make a line");// we handle it later
-		}
+			}else break;
+			}
+		
 
 		return lines;
 	}

@@ -95,14 +95,14 @@ public class MainForGUI extends Frame {
 	 
 					 //for(RevCommit commit:commits){
 						 for(String s:files){
-							System.out.println(i++);
+							System.out.println("the interation: "+i++);
 							 HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
 						 
 						for(String commit:commitlastIds) {
-							/*System.out.println("this is th file relevant path "+s);
-								System.out.println("this commitId is "+ commit);*/
+							System.out.println("this is th file relevant path "+s);
+								System.out.println("this commitId is "+ commit); 
 						 RepoFile rf=new RepoFile(rfm.getRepo(), s, commit );
-							/* Iterator<Line> lines= rf.iterator();
+							 /*Iterator<Line> lines= rf.iterator();
 								while(lines.hasNext()){
 									Line line=lines.next();
 									System.out.println(line.getLineNumber()+line.getAuthor()+line.getCommitId()+line.getLineValue());
