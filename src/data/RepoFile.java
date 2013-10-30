@@ -57,13 +57,27 @@ public class RepoFile implements Iterable<Line> {
 		ArrayList<Line> lines = new ArrayList<Line>(numberOfLines);
 
 		for (int i = 0; i < numberOfLines; ++i) {
+	 
 			RevCommit currentCommit = blame.getSourceCommit(i);
 			PersonIdent currentAuthor = blame.getSourceAuthor(i);
+			//pre check if can make a line object
+			if(pre_check_line(currentCommit, currentAuthor,result.getString(i))){
+				//if can make a line make it
 			lines.add(new Line(currentCommit.getName(),
 					currentAuthor.getName(), i, result.getString(i)));
+			}else   return lines;//System.out.println("can make a line");// we handle it later
 		}
 
 		return lines;
+	}
+
+	private boolean pre_check_line(RevCommit currentCommit,
+			PersonIdent currentAuthor, String string) {
+		if(currentCommit==null||currentAuthor==null||string==null){
+			return false;
+		}else return true;
+		// TODO Auto-generated method stub
+		
 	}
 
 	public int size() {

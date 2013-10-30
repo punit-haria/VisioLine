@@ -5,19 +5,26 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JFileChooser;
 
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 import data.Line;
 import data.RepoFile;
 import data.RepoFileManager;
-
 import visual.primary.Visualizer;
 
 public class MainForGUI extends Frame {
@@ -83,22 +90,25 @@ public class MainForGUI extends Frame {
 					 LinkedList<String> files=rfm.getRelevantPathofFilesByExetension("java");
 					  
 					 Iterable<RevCommit> commits=rfm.getCommitList();
-					 
+				
 					 int i=0;
 	 
-					 for(RevCommit commit:commits){
+					 //for(RevCommit commit:commits){
 						 for(String s:files){
 							System.out.println(i++);
-							//if( rfm.getAlteringCommitIDs(rfm.getRepo(),s ).contains(commit.getName())){
-							/* RepoFile rf=new RepoFile(rfm.getRepo(), s, commit.getName());
-							 Iterator<Line> lines= rf.iterator();
+							 HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
+						 
+						for(String commit:commitlastIds) {
+							/*System.out.println("this is th file relevant path "+s);
+								System.out.println("this commitId is "+ commit);*/
+						 RepoFile rf=new RepoFile(rfm.getRepo(), s, commit );
+							/* Iterator<Line> lines= rf.iterator();
 								while(lines.hasNext()){
 									Line line=lines.next();
 									System.out.println(line.getLineNumber()+line.getAuthor()+line.getCommitId()+line.getLineValue());
-						 */
-						//}
-							//}
-						 }
+								} */
+							 
+						}
 						
 						 
 					 }

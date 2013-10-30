@@ -32,9 +32,8 @@ public class RepoFileManager {
 		this.repo=new FileRepository((this.gitDir+"/.git"));
 		this.git = Git.open(gitWorkDir);
 		commits = git.log().all().call();
-		
 		this.files=new LinkedList<String>();
-		 computeFilesList(gitWorkDir);
+		 computeFilesList(gitWorkDir);//to get list of all files in the folder
 	}
 	public  Iterable<RevCommit> getCommitList(){
 		 return commits;
