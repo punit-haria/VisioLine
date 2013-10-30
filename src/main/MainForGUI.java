@@ -5,6 +5,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -24,7 +25,8 @@ public class MainForGUI extends Frame {
 	private static String gitPath;
 	Panel panel;
 	Button b1,b2;
-	public MainForGUI()
+	public MainForGUI(ArrayList<String> authorList, 
+			ArrayList<RepoFile> repfiles)
 	{
 
 		// Set frame properties
@@ -63,7 +65,7 @@ public class MainForGUI extends Frame {
 		});
 
 		//Test visualization
-		Visualizer vis = new Visualizer();
+		Visualizer vis = new Visualizer(authorList,repfiles);
 		this.add(vis,BorderLayout.CENTER);
 		vis.init();
 	}
@@ -110,7 +112,7 @@ public class MainForGUI extends Frame {
 								} */
 					
 					//visualizer code
-					
+					fileList.add(rf);
 				}
 
 
@@ -120,7 +122,7 @@ public class MainForGUI extends Frame {
 			e.printStackTrace();
 		}
 		
-		new MainForGUI();
+		new MainForGUI(authorList,fileList);
 	}
 
 }
