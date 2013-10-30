@@ -3,9 +3,24 @@ package main;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import javax.swing.JFileChooser;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.RevisionSyntaxException;
+import org.eclipse.jgit.revwalk.RevCommit;
+
+import data.Line;
+import data.RepoFile;
+import data.RepoFileManager;
 
 public class MainForGUI extends Frame {
 	
+	private static String gitPath;
 	Panel panel;
 	Button b1,b2;
 	    public MainForGUI()
@@ -50,6 +65,46 @@ public class MainForGUI extends Frame {
 	    
 	    public static void main(String args[])
 	    {
+			 JFileChooser chooser = new JFileChooser();
+			    chooser.setDialogTitle("Select target directory");
+			    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			    int returnVal = chooser.showOpenDialog(new Frame());
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			    File myFile = chooser.getSelectedFile();
+			    
+			    gitPath=myFile.getAbsolutePath();
+			    }
+			    try {
+			    	
+					RepoFileManager rfm=new RepoFileManager(gitPath);
+					 
+					 LinkedList<String> files=rfm.getRelevantPathofFilesByExetension("java");
+					  
+					 Iterable<RevCommit> commits=rfm.getCommitList();
+					 
+					 int i=0;
+	 
+					 for(RevCommit commit:commits){
+						 for(String s:files){
+							System.out.println(i++);
+							//if( rfm.getAlteringCommitIDs(rfm.getRepo(),s ).contains(commit.getName())){
+							/* RepoFile rf=new RepoFile(rfm.getRepo(), s, commit.getName());
+							 Iterator<Line> lines= rf.iterator();
+								while(lines.hasNext()){
+									Line line=lines.next();
+									System.out.println(line.getLineNumber()+line.getAuthor()+line.getCommitId()+line.getLineValue());
+						 */
+						//}
+							//}
+						 }
+						
+						 
+					 }
+				} catch (RevisionSyntaxException | GitAPIException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	 
 	    new MainForGUI();
 	    }
 
