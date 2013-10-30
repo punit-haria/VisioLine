@@ -89,21 +89,21 @@ public class RepoFile implements Iterable<Line> {
 				int startOld = edits.getBeginA();
 				int endOld = edits.getEndA();
 				String changesStr = "";
-				
-				for(int i = startOld; i <= endOld; ++i){
+				System.out.println(text.size() + fileName);
+				for(int i = startOld; i < endOld; ++i){
 					changesStr = changesStr + text.getString(i) + "\n";
 				}
 				
 				if (changesLog.containsKey(start)) {
 					if (!changesLog.get(start).equals(changesStr)) {
 						changesLog.put(start, changesStr);
-						for (int i = start; i <= end; ++i) {
+						for (int i = start; i < end; ++i) {
 							lineChanges.set(i, lineChanges.get(i) + 1);
 						}
 					}
 				} else {
 					changesLog.put(start, changesStr);
-					for (int i = start; i <= end; ++i) {
+					for (int i = start; i < end; ++i) {
 						lineChanges.set(i, lineChanges.get(i) + 1);
 					}
 				}
