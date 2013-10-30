@@ -5,21 +5,22 @@ import java.util.Iterator;
 
 import data.RepoFile;
 import data.Line;
-import processing.core.PApplet;
 
 public class FileBar {
 	
 	//parent PApplet that we render onto
-	private PApplet parent;
-	//width of FileBar
-	private float _width;   
+	private Visualizer parent;
 	//collection of LineStripes
 	private ArrayList<LineStripe> stripes;
+	//number of files
+	private int numberOfFiles;
+	//file name
+	private String fileName;
 
-	public FileBar(PApplet p, RepoFile file) {
-		this.parent = p;
-		this._width = file.size()*Constants.lineStripeWidth;
-		
+	public FileBar(Visualizer v, RepoFile file) {
+		this.parent = v;
+		this.numberOfFiles = file.size();
+		this.fileName = file.getFileName();
 		//construct LineStripes
 		stripes = new ArrayList<LineStripe>();
 		Iterator<Line> it = file.iterator();
@@ -31,35 +32,44 @@ public class FileBar {
 		
 	}
 
+	//display-width of FileBar
 	public float getWidth() {
-		return _width;
+		return numberOfFiles*Constants.getLineStripeWidth();
+	}
+	
+	//file name
+	public String getFileName(){
+		return fileName;
 	}
 
 	// draw bar
-	void display(float xx, float yy) {
+	public void display(float xx, float yy) {
 		Iterator<LineStripe> it = stripes.iterator();
 		float offset = 0;
 		while(it.hasNext()){
 			LineStripe stripe = it.next();
 			stripe.display(xx + offset, yy);
-			offset += Constants.lineStripeWidth;
+			offset += Constants.getLineStripeWidth();
 		}
 	}
 	
 	private class LineStripe {
 		
 		//reference to corresponding Line object
-		private Line line;
+		private Line line; 
+		//hexadecimal valued color
+		private int lineColor;
 		
-		private LineStripe(Line line){
-			this.line = line;
+		private LineStripe(Line l){
+			this.line = l;
+			this.lineColor = parent.getAuthorColor(line.getAuthor());
 		}	
 		
 		private void display(float xx, float yy){
-			parent.fill(255,100);
 			parent.noStroke();
-			parent.rect(xx,yy,Constants.lineStripeWidth,
-					Constants.lineStripeHeight);
+			parent.fill(lineColor);
+			parent.rect(xx,yy,Constants.getLineStripeWidth(),
+					Constants.getLineStripeHeight());
 		}
 		
 	}

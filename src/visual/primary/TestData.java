@@ -1,4 +1,4 @@
-package main;
+package visual.primary;
 
 public class TestData {
 	
