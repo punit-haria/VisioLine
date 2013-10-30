@@ -9,12 +9,12 @@ public class Line {
 	private int timesChanged;
 	
 	public Line(String commitId, String author,
-			int lineNumber, String lineValue){
+			int lineNumber, String lineValue, int changes){
 		this.commitId = commitId;
 		this.author = author;
 		this.lineNumber = lineNumber;
 		this.lineValue = lineValue;
-		timesChanged = 0;
+		timesChanged = changes;
 	}
 	
 	public String getCommitId() {
