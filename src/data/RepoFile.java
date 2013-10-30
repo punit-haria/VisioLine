@@ -32,10 +32,11 @@ public class RepoFile implements Iterable<Line> {
 	public RepoFile(FileRepository repo, String name, String commitId)
 			throws GitAPIException, RevisionSyntaxException,
 			AmbiguousObjectException, IncorrectObjectTypeException, IOException {
+		lines = new ArrayList<Line>();
 		this.fileName = name;
 		this.commitId = commitId;
 		// create list of line objects
-		this.lines = populateLineInfo(repo);
+		lines = populateLineInfo(repo);
 	}
 
 	/*

@@ -6,23 +6,20 @@ import java.util.Iterator;
 import data.RepoFile;
 import data.Line;
 import processing.core.PApplet;
-import visual.primary.Constants.Colour;
 
 public class FileBar {
 	
 	//parent PApplet that we render onto
 	private PApplet parent;
+	//width of FileBar
+	private float _width;   
 	//collection of LineStripes
 	private ArrayList<LineStripe> stripes;
-	//number of files
-	private int numberOfFiles;
-	//file name
-	private String fileName;
 
 	public FileBar(PApplet p, RepoFile file) {
 		this.parent = p;
-		this.numberOfFiles = file.size();
-		this.fileName = file.getFileName();
+		this._width = file.size()*Constants.lineStripeWidth;
+		
 		//construct LineStripes
 		stripes = new ArrayList<LineStripe>();
 		Iterator<Line> it = file.iterator();
@@ -34,14 +31,8 @@ public class FileBar {
 		
 	}
 
-	//display-width of FileBar
 	public float getWidth() {
-		return numberOfFiles*Constants.getLineStripeWidth();
-	}
-	
-	//file name
-	public String getFileName(){
-		return fileName;
+		return _width;
 	}
 
 	// draw bar
@@ -51,27 +42,24 @@ public class FileBar {
 		while(it.hasNext()){
 			LineStripe stripe = it.next();
 			stripe.display(xx + offset, yy);
-			offset += Constants.getLineStripeWidth();
+			offset += Constants.lineStripeWidth;
 		}
 	}
 	
 	private class LineStripe {
 		
 		//reference to corresponding Line object
-		private Line line; 
-		//hexadecimal valued color
-		private int lineColor;
+		private Line line;
 		
 		private LineStripe(Line line){
 			this.line = line;
-			this.lineColor = Colour.BLUE.get();
 		}	
 		
 		private void display(float xx, float yy){
+			parent.fill(255,100);
 			parent.noStroke();
-			parent.fill(lineColor);
-			parent.rect(xx,yy,Constants.getLineStripeWidth(),
-					Constants.getLineStripeHeight());
+			parent.rect(xx,yy,Constants.lineStripeWidth,
+					Constants.lineStripeHeight);
 		}
 		
 	}
