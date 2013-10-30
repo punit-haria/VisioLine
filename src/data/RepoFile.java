@@ -49,7 +49,7 @@ public class RepoFile implements Iterable<Line> {
 	}
 
 	/*
-	 * Populates line object.
+	 * Populates lines Array.
 	 */
 	private ArrayList<Line> populateLineInfo(FileRepository repo)
 			throws RevisionSyntaxException, MissingObjectException,
@@ -154,6 +154,9 @@ public class RepoFile implements Iterable<Line> {
 		// TODO Auto-generated method stub
 	}
 
+	/*
+	 * returns number of lines in file
+	 */
 	public int size() {
 		return lines.size();
 	}
@@ -163,10 +166,16 @@ public class RepoFile implements Iterable<Line> {
 		return lines.iterator();
 	}
 
+	/*
+	 * returns file name of files
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 
+	/*
+	 * return commitId given
+	 */
 	public String getCommitId() {
 		return commitId;
 	}
