@@ -2,7 +2,7 @@ package visual.primary;
 
 import processing.core.PApplet;
 
-public class Constants {
+class Constants {
 	//primary visualization dimensions as fractions of screen size
 	private static float lineStripeWidth = 0.008f;
 	private static float lineStripeHeight= 0.25f;

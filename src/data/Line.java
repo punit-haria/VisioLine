@@ -1,7 +1,5 @@
 package data;
 
-import java.util.Date;
-
 public class Line {
 	
 	private String commitId;

@@ -5,13 +5,11 @@ import java.util.Iterator;
 
 import data.RepoFile;
 import data.Line;
-import processing.core.PApplet;
-import visual.primary.Constants.Colour;
 
 public class FileBar {
 	
 	//parent PApplet that we render onto
-	private PApplet parent;
+	private Visualizer parent;
 	//collection of LineStripes
 	private ArrayList<LineStripe> stripes;
 	//number of files
@@ -19,8 +17,8 @@ public class FileBar {
 	//file name
 	private String fileName;
 
-	public FileBar(PApplet p, RepoFile file) {
-		this.parent = p;
+	public FileBar(Visualizer v, RepoFile file) {
+		this.parent = v;
 		this.numberOfFiles = file.size();
 		this.fileName = file.getFileName();
 		//construct LineStripes
@@ -62,9 +60,9 @@ public class FileBar {
 		//hexadecimal valued color
 		private int lineColor;
 		
-		private LineStripe(Line line){
-			this.line = line;
-			this.lineColor = Colour.BLUE.get();
+		private LineStripe(Line l){
+			this.line = l;
+			this.lineColor = parent.getAuthorColor(line.getAuthor());
 		}	
 		
 		private void display(float xx, float yy){

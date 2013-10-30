@@ -2,20 +2,18 @@ package visual.primary;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import data.RepoFile;
 
-import processing.core.PApplet;
 
 public class FileDisplayContainer {
 	
 	//parent PApplet that we render onto
-	private PApplet parent;
+	private Visualizer parent;
 	//collection of LineStripes
 	private ArrayList<FileBar> files;
 	
-	public FileDisplayContainer(PApplet p){
-		this.parent = p;
+	public FileDisplayContainer(Visualizer v){
+		this.parent = v;
 	}
 	
 	public void addFile(RepoFile repofile){

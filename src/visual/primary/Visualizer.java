@@ -1,10 +1,10 @@
 package visual.primary;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import data.RepoFile;
 
 import processing.core.*;
 import visual.primary.Constants;
@@ -16,23 +16,29 @@ public class Visualizer extends PApplet {
 	private int[][] test;
 	
 	//set of project authors
-	private HashMap<String,Integer> authorColorScheme;
+	private HashMap<String,Integer> authorColorScheme = null;
+	//set of fileBars
+	private FileDisplayContainer displayFiles = null;
 	
-	public Visualizer(ArrayList<String> authorList){
+	public Visualizer(ArrayList<String> authorList, 
+			ArrayList<RepoFile> repfiles){
 		super();		
 		Constants.init(this);		
 		mapAuthorsToColors(authorList);
+		
+		//add repoFiles to displayContainer
+		displayFiles = new FileDisplayContainer(this);
+		Iterator<RepoFile> iter = repfiles.iterator();
+		while(iter.hasNext()){
+			RepoFile file = iter.next();
+			displayFiles.addFile(file);
+		}
 	}
 	
 	//for testing only
 	public Visualizer(){
 		super();
 		Constants.init(this);
-		int numColors = 0;
-		for(Colour c : Colour.values()){
-			numColors += 1;
-		}
-		System.out.println(numColors);
 	}
 	
 	@Override
@@ -45,22 +51,31 @@ public class Visualizer extends PApplet {
 			frame.setResizable(true);
 		}
 		
-		//test code
+		//generate random data for testing
 		TestData td = new TestData();
 		test = td.getData();		
 	}
 		
 	@Override
-	public void draw() {		
+	public void draw() {	
 		//test drawing
 		noStroke();
+		//displayFiles.display(50,50);		
+
+		
 		for(int i = 0; i < test.length; i++){
 			int value = test[i][0];
 			float _width = Constants.getLineStripeWidth(); 
 			fill(value*25,(10-value)*12,0);	
 			rect((i*_width) + 50, 50,
 				_width,Constants.getLineStripeHeight());
-		}		
+		}	
+			
+	}
+	
+	//get corresponding color for author
+	public int getAuthorColor(String author){
+		return authorColorScheme.get(author);
 	}
 	
 	private void mapAuthorsToColors(ArrayList<String> authorList) {
@@ -100,6 +115,7 @@ public class Visualizer extends PApplet {
 
 		//assign colour to each author
 		if(requiredColors.size() < numAuthors) System.exit(ERROR);
+		authorColorScheme = new HashMap<String,Integer>();
 		Iterator<String> authIter = authorList.iterator();
 		Iterator<Integer> colorIter = requiredColors.iterator();
 		while(authIter.hasNext()){
