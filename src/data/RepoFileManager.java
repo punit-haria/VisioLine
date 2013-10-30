@@ -26,78 +26,88 @@ public class RepoFileManager {
 	private FileRepository repo;
 	private Iterable<RevCommit> commits;
 	private LinkedList<String> files;
-	public RepoFileManager(String Dir) throws IOException, GitAPIException{
-		this.gitDir=Dir;
+
+	public RepoFileManager(String Dir) throws IOException, GitAPIException {
+		this.gitDir = Dir;
 		this.gitWorkDir = new File(this.gitDir);
-		this.repo=new FileRepository((this.gitDir+"/.git"));
+		this.repo = new FileRepository((this.gitDir + "/.git"));
 		this.git = Git.open(gitWorkDir);
 		commits = git.log().all().call();
-		this.files=new LinkedList<String>();
-		 computeFilesList(gitWorkDir);//to get list of all files in the folder
+		this.files = new LinkedList<String>();
+		computeFilesList(gitWorkDir);// to get list of all files in the folder
 	}
-	public  Iterable<RevCommit> getCommitList(){
-		 return commits;
-	 }
-	 public File get_folder(){
-		 return this.gitWorkDir;
-	 }
-	 public void computeFilesList(File folder){			 
-		    for (final File fileEntry : folder.listFiles()) {
-		        if (fileEntry.isDirectory()) {
-		        	
-		           computeFilesList(fileEntry);
-		          
-		        } else {
-		        	 
-		        	String s=fileEntry.getPath();
-		        	if(s.contains("\\")){
-		   			 
-		    			s=s.replace("\\", "/");
-		    			} 
-		        	 files.add(s);
-		        }
-		    }
-		 
+
+	public Iterable<RevCommit> getCommitList() {
+		return commits;
 	}
-	 public LinkedList<String> getFullPathofFiles(){//useless method for test purpose
-			return files;
-		}
-		public LinkedList<String> getRelevantPathofFiles(){//all jgit method need relevant path
-			LinkedList<String> shotPathFiles=new LinkedList<String>();
-			int start=this.gitDir.length()+1;
-			
-			for(String s:files){
-				shotPathFiles.add(s.substring(start));
-				
-			}
-			return shotPathFiles;
-			
-		}
-		//if you only deal with java file use this parameter is "java"
-		public LinkedList<String> getRelevantPathofFilesByExetension(String fileType){
-			LinkedList<String> shotPathFiles=new LinkedList<String>();
-			int start=this.gitDir.length()+1;
-			 
-			for(String s:files){
-				if(s.substring(s.lastIndexOf('.')+1).equalsIgnoreCase(fileType)){
-						
-				shotPathFiles.add(s.substring(start));
+
+	public File get_folder() {
+		return this.gitWorkDir;
+	}
+
+	public void computeFilesList(File folder) {
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+
+				computeFilesList(fileEntry);
+
+			} else {
+
+				String s = fileEntry.getPath();
+				if (s.contains("\\")) {
+
+					s = s.replace("\\", "/");
 				}
-				
+				files.add(s);
 			}
-			return shotPathFiles;
-			
 		}
-		public FileRepository getRepo(){
-			return this.repo;
+
+	}
+
+	public LinkedList<String> getFullPathofFiles() {// useless method for test
+													// purpose
+		return files;
+	}
+
+	public LinkedList<String> getRelevantPathofFiles() {// all jgit method need
+														// relevant path
+		LinkedList<String> shotPathFiles = new LinkedList<String>();
+		int start = this.gitDir.length() + 1;
+
+		for (String s : files) {
+			shotPathFiles.add(s.substring(start));
+
 		}
+		return shotPathFiles;
+	}
+
+	// if you only deal with java file use this parameter is "java"
+	public LinkedList<String> getRelevantPathofFilesByExetension(String fileType) {
+		LinkedList<String> shotPathFiles = new LinkedList<String>();
+		int start = this.gitDir.length() + 1;
+
+		for (String s : files) {
+			if (s.substring(s.lastIndexOf('.') + 1).equalsIgnoreCase(fileType)) {
+
+				shotPathFiles.add(s.substring(start));
+			}
+
+		}
+		return shotPathFiles;
+
+	}
+
+	public FileRepository getRepo() {
+		return this.repo;
+	}
 
 	/*
 	 * Gets all commits that a file was altered in
 	 */
-	public static HashSet<String> getAlteringCommitIDs(FileRepository repo, String filePath)
-			throws RevisionSyntaxException, MissingObjectException,
-			IncorrectObjectTypeException, AmbiguousObjectException, IOException {
+	public static HashSet<String> getAlteringCommitIDs(FileRepository repo,
+			String filePath) throws RevisionSyntaxException,
+			MissingObjectException, IncorrectObjectTypeException,
+			AmbiguousObjectException, IOException {
 		HashSet<String> commits = new HashSet<String>();
 
 		RevWalk revWalk = new RevWalk(repo);
@@ -112,5 +122,21 @@ public class RepoFileManager {
 		}
 		return (commits);
 	}
-	
+
+	/*
+	 * Gets all contributors of a given repository
+	 */
+	public static HashSet<String> getContributor(FileRepository repo) throws RevisionSyntaxException, MissingObjectException, IncorrectObjectTypeException, AmbiguousObjectException, IOException {
+		HashSet<String> commits = new HashSet<String>();
+
+		RevWalk revWalk = new RevWalk(repo);
+		RevCommit root = revWalk.parseCommit(repo.resolve("HEAD"));
+		revWalk.markStart(root);
+
+		// prints out relevant commits (changed file commits)
+		for (RevCommit revCommit : revWalk) {
+			commits.add(revCommit.getAuthorIdent().getName());
+		}
+		return (commits);
+	}
 }
