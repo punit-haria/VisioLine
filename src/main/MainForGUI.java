@@ -97,10 +97,14 @@ public class MainForGUI extends Frame {
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
 			
 			//for(RevCommit commit:commits){
-			int count = 7;
+			int count = 5;
 			
-			for(String s:files){
+			for(String s:files){				
+				if(count > 0) count --;
+				else break;
+				
 				System.out.println("the interation: "+i++);
+				System.out.println(s);
 				//HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
 
 				//for(String commit:commitlastIds) {
@@ -111,8 +115,7 @@ public class MainForGUI extends Frame {
 					//visualizer code
 					fileList.add(rf);
 				//}				
-					if(count > 0) count --;
-					else break;
+					
 			}
 			
 			ArrayList<String> authors = new ArrayList<String>();

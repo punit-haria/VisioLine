@@ -13,7 +13,7 @@ import visual.primary.Constants.Colour;
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
 	
-	private int[][] test;
+	//private int[][] test;
 	
 	//set of project authors
 	private HashMap<String,Integer> authorColorScheme = null;
@@ -36,10 +36,12 @@ public class Visualizer extends PApplet {
 	}
 	
 	//for testing only
+	/*
 	public Visualizer(){
 		super();
 		Constants.init(this);
 	}
+	*/
 	
 	@Override
 	public void setup() {
@@ -52,24 +54,25 @@ public class Visualizer extends PApplet {
 		}
 		
 		//generate random data for testing
-		TestData td = new TestData();
-		test = td.getData();		
+		//TestData td = new TestData();
+		//test = td.getData();		
 	}
 		
 	@Override
 	public void draw() {	
 		//test drawing
 		noStroke();
-		//displayFiles.display(50,50);		
+		displayFiles.display(10,50);		
 
-		
+		/*
 		for(int i = 0; i < test.length; i++){
 			int value = test[i][0];
 			float _width = Constants.getLineStripeWidth(); 
 			fill(value*25,(10-value)*12,0);	
 			rect((i*_width) + 50, 50,
 				_width,Constants.getLineStripeHeight());
-		}	
+		}
+		*/	
 			
 	}
 	
@@ -96,12 +99,16 @@ public class Visualizer extends PApplet {
 		if(numAuthors > numColors){
 			int perColor = (int)Math.ceil((double)numAuthors/numColors);
 			for(Colour c : Colour.values()){
+				requiredColors.add(c.get());
+			}
+			for(Colour c : Colour.values()){
 				int originalColor = c.get();
 				for(int i = 0; i < perColor; i++){
 					int offset = (int)(Colour.offset()*((double)i/perColor));
 					int currentColor = originalColor;
-					for(int j = 0; j < 6; j += 2){
-						currentColor += ((int)Math.pow(0x10,j))*offset;
+					for(int j = 4; j > 0; j -= 2){
+						int temp = Math.max(((int)Math.pow(0x10,j))*offset,0x0);
+						currentColor -= temp;
 					}
 					requiredColors.add(currentColor);
 				}

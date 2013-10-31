@@ -4,9 +4,9 @@ import processing.core.PApplet;
 
 class Constants {
 	//primary visualization dimensions as fractions of screen size
-	private static float lineStripeWidth = 0.008f;
+	private static float lineStripeWidth = 0.003f;
 	private static float lineStripeHeight= 0.25f;
-	private static float fileBarSpacing = 0.05f;
+	private static float fileBarSpacing = 0.03f;
 	
 	//colors
 	public static int red = 0xFFFF0000;
@@ -34,7 +34,7 @@ class Constants {
 		
 		private int hexVal;
 		//offset to adjust primary colours by (to extend colour library)
-		private static int offset = 0x35;
+		private static int offset = 0x15;
 		
 		private Colour(int value){
 			this.hexVal = value;

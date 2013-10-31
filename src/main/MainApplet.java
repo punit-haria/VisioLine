@@ -45,28 +45,6 @@ public class MainApplet extends Applet {
 		// Add the panel to the frame
 		this.add(panel,BorderLayout.NORTH);
 
-		//Test visualization
-		//Visualizer vis = nastyTestingMethod();
-		Visualizer vis = new Visualizer();
-		this.add(vis,BorderLayout.CENTER);
-		vis.init();
-		
-	}
-	
-	@SuppressWarnings("unused")
-	private Visualizer nastyTestingMethod(){
-		ArrayList<String> authorList = new ArrayList<String>();
-		authorList.add("auth1");
-		authorList.add("auth2");
-		authorList.add("auth3");
-		authorList.add("fourthAuthor");
-		authorList.add("fifthAuthor");
-		authorList.add("six");
-		
-		ArrayList<RepoFile> repFiles = new ArrayList<RepoFile>();
-		
-		Visualizer v = new Visualizer(authorList,repFiles);		
-		return v;
 	}
 
 }

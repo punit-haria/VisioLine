@@ -89,7 +89,6 @@ public class RepoFile implements Iterable<Line> {
 				int startOld = edits.getBeginA();
 				int endOld = edits.getEndA();
 				String changesStr = "";
-				System.out.println(text.size() + fileName);
 				for(int i = startOld; i < endOld; ++i){
 					changesStr = changesStr + text.getString(i) + "\n";
 				}

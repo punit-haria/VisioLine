@@ -14,6 +14,7 @@ public class FileDisplayContainer {
 	
 	public FileDisplayContainer(Visualizer v){
 		this.parent = v;
+		files = new ArrayList<FileBar>();
 	}
 	
 	public void addFile(RepoFile repofile){
@@ -26,8 +27,10 @@ public class FileDisplayContainer {
 		float offset = 0;
 		while(it.hasNext()){
 			FileBar fbar = it.next();
-			fbar.display(xx + offset, yy);
-			offset += Constants.getFileBarSpacing();
+			//fbar.display(xx + offset, yy);
+			//offset += Constants.getFileBarSpacing() + fbar.getWidth();
+			fbar.display(xx, yy + offset);
+			offset += Constants.getLineStripeHeight()+10;
 		}
 	}
 
