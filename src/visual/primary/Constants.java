@@ -5,7 +5,7 @@ import processing.core.PApplet;
 class Constants {
 	//primary visualization dimensions as fractions of screen size
 	private static float lineStripeWidth = 0.003f;
-	private static float lineStripeHeight= 0.25f;
+	private static float lineStripeHeight= 0.1f;
 	private static float fileBarSpacing = 0.03f;
 	
 	//colors

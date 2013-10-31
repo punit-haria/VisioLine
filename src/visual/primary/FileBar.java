@@ -17,7 +17,7 @@ public class FileBar {
 	//file name
 	private String fileName;
 	//max number of times a line has been changed
-	private int maxLineChanged = 1;
+	private int maxLineChanged;
 
 	public FileBar(Visualizer v, RepoFile file) {
 		this.parent = v;
@@ -26,7 +26,8 @@ public class FileBar {
 		//construct LineStripes
 		stripes = new ArrayList<LineStripe>();
 		Iterator<Line> it = file.iterator();
-		int currMax;
+		int currMax = 0;
+		maxLineChanged = 1;
 		while(it.hasNext()){
 			Line line = it.next();
 			LineStripe ls = new LineStripe(line);
@@ -59,6 +60,7 @@ public class FileBar {
 			offset += Constants.getLineStripeWidth();
 		}
 		//print file name
+		parent.fill(0);
 		parent.text(fileName,xx,yy+Constants.getLineStripeHeight()+10);
 	}
 	

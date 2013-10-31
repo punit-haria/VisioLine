@@ -103,10 +103,10 @@ public class Visualizer extends PApplet {
 			}
 			for(Colour c : Colour.values()){
 				int originalColor = c.get();
-				for(int i = 0; i < perColor; i++){
+				for(int i = perColor; i > 1; i--){
 					int offset = (int)(Colour.offset()*((double)i/perColor));
 					int currentColor = originalColor;
-					for(int j = 4; j > 0; j -= 2){
+					for(int j = 4; j >= 0; j -= 2){
 						int temp = Math.max(((int)Math.pow(0x10,j))*offset,0x0);
 						currentColor -= temp;
 					}
