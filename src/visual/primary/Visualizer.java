@@ -13,8 +13,6 @@ import visual.primary.Constants.Colour;
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
 	
-	//private int[][] test;
-	
 	//set of project authors
 	private HashMap<String,Integer> authorColorScheme = null;
 	//set of fileBars
@@ -35,14 +33,6 @@ public class Visualizer extends PApplet {
 		}
 	}
 	
-	//for testing only
-	/*
-	public Visualizer(){
-		super();
-		Constants.init(this);
-	}
-	*/
-	
 	@Override
 	public void setup() {
 		//inital setup
@@ -51,29 +41,14 @@ public class Visualizer extends PApplet {
 		//resizability
 		if(frame != null){
 			frame.setResizable(true);
-		}
-		
-		//generate random data for testing
-		//TestData td = new TestData();
-		//test = td.getData();		
+		}	
 	}
 		
 	@Override
 	public void draw() {	
 		//test drawing
 		noStroke();
-		displayFiles.display(10,50);		
-
-		/*
-		for(int i = 0; i < test.length; i++){
-			int value = test[i][0];
-			float _width = Constants.getLineStripeWidth(); 
-			fill(value*25,(10-value)*12,0);	
-			rect((i*_width) + 50, 50,
-				_width,Constants.getLineStripeHeight());
-		}
-		*/	
-			
+		displayFiles.display(10,50);					
 	}
 	
 	//get corresponding color for author
