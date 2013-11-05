@@ -9,6 +9,7 @@ import data.RepoFile;
 import processing.core.*;
 import visual.primary.Constants;
 import visual.primary.Constants.Colour;
+import visual.ui.HorizontalScrollBar;
 
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
@@ -17,38 +18,41 @@ public class Visualizer extends PApplet {
 	private HashMap<String,Integer> authorColorScheme = null;
 	//set of fileBars
 	private FileDisplayContainer displayFiles = null;
+	//horizontal scroll bar
+	HorizontalScrollBar hscroll;
 	
 	public Visualizer(ArrayList<String> authorList, 
 			ArrayList<RepoFile> repfiles){
-		super();		
-		Constants.init(this);		
-		mapAuthorsToColors(authorList);
-		
-		//add repoFiles to displayContainer
-		displayFiles = new FileDisplayContainer(this);
-		Iterator<RepoFile> iter = repfiles.iterator();
-		while(iter.hasNext()){
-			RepoFile file = iter.next();
-			displayFiles.addFile(file);
-		}
+		super();				
+		mapAuthorsToColors(authorList);		
+		displayFiles = new FileDisplayContainer(repfiles, this);		
 	}
 	
 	@Override
 	public void setup() {
-		//inital setup
-		background(Constants.white);	
-		
 		//resizability
 		if(frame != null){
 			frame.setResizable(true);
 		}	
+		
+		//horizontal scroll bar
+		int hscrollOffset = (int) (Constants.lineStripeHeight + 
+			Constants.fileDisplayStartY + Constants.horizontalScrollBarOffset);
+		hscroll = new HorizontalScrollBar(Constants.horizontalScrollBarX, 
+				hscrollOffset, Constants.scrollBarWidth, Constants.scrollBarHeight,
+				Constants.scrollBarLooseness, this);
 	}
 		
 	@Override
-	public void draw() {	
-		//test drawing
-		noStroke();
-		displayFiles.display(10,50);					
+	public void draw() {
+		//refresh screen
+		background(Constants.white);	
+		//display files
+		int filesPosX = Constants.fileDisplayStartX -
+			(int)(hscroll.getSliderPos()*displayFiles.getLength());
+		displayFiles.display(filesPosX,Constants.fileDisplayStartY);			
+		//display scroll bar
+		hscroll.display();
 	}
 	
 	//get corresponding color for author

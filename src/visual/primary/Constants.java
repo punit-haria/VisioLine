@@ -1,12 +1,21 @@
 package visual.primary;
 
-import processing.core.PApplet;
-
 class Constants {
-	//primary visualization dimensions as fractions of screen size
-	private static float lineStripeWidth = 0.003f;
-	private static float lineStripeHeight= 0.1f;
-	private static float fileBarSpacing = 0.03f;
+	//absolute visualization dimensions:
+	
+	//file display position
+	public static int fileDisplayStartX = 75;
+	public static int fileDisplayStartY = 50;
+	//file bar
+	public static float lineStripeWidth = 5f;	
+	public static float fileBarSpacing = 20f;
+	public static float lineStripeHeight= 200f;
+	//horizontal scroll bar
+	public static int horizontalScrollBarOffset = 40;
+	public static int horizontalScrollBarX = 75;
+	public static int scrollBarWidth = 400;
+	public static int scrollBarHeight = 20;
+	public static int scrollBarLooseness = 20;
 	
 	//colors
 	public static int red = 0xFFFF0000;
@@ -25,8 +34,8 @@ class Constants {
 	public enum Colour {
 		RED(0xFFFF0000),
 		BLUE(0xFF1B1BB3),
+		GREEN(0xFF00CC00),
 		YELLOW(0xFFFFFF00),
-		GREEN(0xFF00CC00),		
 		PURPLE(0xFF7109AA),	
 		PINK(0xFFE93A90),
 		ORANGE(0xFFFF9000),
@@ -48,25 +57,7 @@ class Constants {
 			return offset;
 		}
 	};
-	
-	//parent PApplet
-	private static PApplet parent = null;
-	
-	public static void init(PApplet p){
-		parent = p;	
-	}
-	
+
 	private Constants(){}
-	
-	public static float getLineStripeWidth() {
-		return lineStripeWidth*parent.getWidth();
-	}
 
-	public static float getLineStripeHeight() {
-		return lineStripeHeight*parent.getHeight();
-	}
-
-	public static float getFileBarSpacing() {
-		return fileBarSpacing*parent.getWidth();
-	}
 }

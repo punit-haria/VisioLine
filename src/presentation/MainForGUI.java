@@ -96,7 +96,7 @@ public class MainForGUI extends Frame {
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
 			
 			//for(RevCommit commit:commits){
-			int count = 6;
+			int count = 5;
 			
 			for(String s:files){				
 				if(count > 0) count --;
