@@ -136,6 +136,9 @@ public class RepoFile implements Iterable<Line> {
 		return diffList;
 	}
 
+	/*
+	 * Returns the raw text of a file from a specific commit
+	 */
 	private RawText getText(BlameCommand blamer, RevCommit commit) throws GitAPIException {
 		// text for older elements
 		blamer.setFilePath(fileName);
@@ -144,13 +147,15 @@ public class RepoFile implements Iterable<Line> {
 		return result.getResultContents();
 	}
 
+	/*
+	 * Check line for correctness to prevent errors
+	 */
 	private boolean pre_check_line(RevCommit currentCommit,
 			PersonIdent currentAuthor, String string) {
 		if (currentCommit == null || currentAuthor == null || string == null) {
 			return false;
 		} else
 			return true;
-		// TODO Auto-generated method stub
 	}
 
 	/*
