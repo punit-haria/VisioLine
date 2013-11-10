@@ -90,7 +90,6 @@ public class MainForGUI extends Frame {
 
 			Iterable<RevCommit> commits=rfm.getCommitList();
 
-			int i=0;
 
 			//visualizer
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
@@ -102,7 +101,6 @@ public class MainForGUI extends Frame {
 				if(count > 0) count --;
 				else break;
 				
-				System.out.println("the interation: "+i++);
 				System.out.println(s);
 				//HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
 

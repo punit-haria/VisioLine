@@ -120,7 +120,8 @@ public class RepoFile implements Iterable<Line> {
 					result.getString(i))) {
 				// if can make a line make it
 				lines.add(new Line(currentCommit.getName(), currentAuthor
-						.getName(), i, result.getString(i), lineChanges.get(i)));
+						.getName(), i, result.getString(i), lineChanges.get(i), "FILLER"));
+				//TODO add correct line type\
 			} else
 				return lines;// System.out.println("can make a line");// we
 								// handle it later
