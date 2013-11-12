@@ -8,7 +8,7 @@ class Constants {
 	public static int fileDisplayStartY = 50;
 	//file bar
 	private static float lineStripeWidth = 5f;	
-	private static float fileBarSpacing = 20f;	
+	private static float fileBarSpacing = 50f;	
 	public static float lineStripeHeight= 400f;
 	
 	public static float getLineStripeWidth(){

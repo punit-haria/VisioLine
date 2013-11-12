@@ -18,6 +18,9 @@ public class FileBar {
 	private String fileName;
 	//max number of times a line has been changed
 	private int maxLineChanged;
+	//file bar height
+	private int absoluteHeight;
+	
 
 	public FileBar(Visualizer v, RepoFile file) {
 		this.parent = v;
@@ -37,7 +40,7 @@ public class FileBar {
 				maxLineChanged = currMax;
 			}
 		}
-		
+		absoluteHeight = maxLineChanged;
 	}
 
 	//display-width of FileBar
@@ -48,6 +51,16 @@ public class FileBar {
 	//file name
 	public String getFileName(){
 		return fileName;
+	}
+	
+	//get maximum #changes
+	public int getLocalMaxChanges(){
+		return maxLineChanged;
+	}
+	
+	//set file bar height
+	public void setHeight(int h){
+		absoluteHeight = h;
 	}
 
 	// draw bar
@@ -79,7 +92,7 @@ public class FileBar {
 		
 		private void display(float xx, float yy){
 			parent.fill(lineColor);
-			float height = Constants.lineStripeHeight * ((float)(line.getTimesChanged()+1)/(float)maxLineChanged);
+			float height = Constants.lineStripeHeight * ((float)(line.getTimesChanged()+1)/(float)absoluteHeight);
 			parent.rect(xx,yy+(Constants.lineStripeHeight-height),Constants.getLineStripeWidth(),height);
 		}
 		

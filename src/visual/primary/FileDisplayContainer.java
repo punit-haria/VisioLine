@@ -16,10 +16,18 @@ public class FileDisplayContainer {
 		this.parent = v;
 		files = new ArrayList<FileBar>();
 		Iterator<RepoFile> iter = repfiles.iterator();
+		int max_height = 1;
 		while(iter.hasNext()){
 			RepoFile file = iter.next();
 			FileBar fb = new FileBar(parent, file);
-			files.add(fb);			
+			int curr_max = fb.getLocalMaxChanges();
+			if(curr_max > max_height) max_height = curr_max;
+			files.add(fb);		
+		}
+		Iterator<FileBar> it = files.iterator();
+		while(it.hasNext()){
+			FileBar fb = it.next();
+			fb.setHeight(max_height);
 		}
 	}
 	
