@@ -19,6 +19,7 @@ import visual.primary.Visualizer;
 import data.RepoFile;
 import data.RepoFileManager;
 
+@SuppressWarnings("serial")
 public class MainForGUI extends Frame {
 
 	private static String gitPath;

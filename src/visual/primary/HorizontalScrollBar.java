@@ -1,4 +1,4 @@
-package visual.ui;
+package visual.primary;
 
 import processing.core.PApplet;
 

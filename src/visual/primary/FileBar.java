@@ -42,7 +42,7 @@ public class FileBar {
 
 	//display-width of FileBar
 	public float getWidth() {
-		return numberOfLines*Constants.lineStripeWidth;
+		return numberOfLines*Constants.getLineStripeWidth();
 	}
 	
 	//file name
@@ -58,7 +58,7 @@ public class FileBar {
 		while(it.hasNext()){
 			LineStripe stripe = it.next();
 			stripe.display(xx + offset, yy);
-			offset += Constants.lineStripeWidth;
+			offset += Constants.getLineStripeWidth();
 		}
 		//print file name
 		parent.fill(0);
@@ -80,8 +80,7 @@ public class FileBar {
 		private void display(float xx, float yy){
 			parent.fill(lineColor);
 			float height = Constants.lineStripeHeight * ((float)(line.getTimesChanged()+1)/(float)maxLineChanged);
-			parent.rect(xx,yy+(Constants.lineStripeHeight-height),Constants.lineStripeWidth,
-					height);
+			parent.rect(xx,yy+(Constants.lineStripeHeight-height),Constants.getLineStripeWidth(),height);
 		}
 		
 	}

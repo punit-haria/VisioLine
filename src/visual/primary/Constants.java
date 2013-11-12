@@ -7,15 +7,35 @@ class Constants {
 	public static int fileDisplayStartX = 75;
 	public static int fileDisplayStartY = 50;
 	//file bar
-	public static float lineStripeWidth = 5f;	
-	public static float fileBarSpacing = 20f;
-	public static float lineStripeHeight= 200f;
+	private static float lineStripeWidth = 5f;	
+	private static float fileBarSpacing = 20f;	
+	public static float lineStripeHeight= 400f;
+	
+	public static float getLineStripeWidth(){
+		return lineStripeWidth*zoomRatio;
+	}
+	
+	public static float getFileBarSpacing(){
+		return fileBarSpacing*zoomRatio;
+	}
+	
 	//horizontal scroll bar
 	public static int horizontalScrollBarOffset = 40;
 	public static int horizontalScrollBarX = 75;
 	public static int scrollBarWidth = 400;
 	public static int scrollBarHeight = 20;
 	public static int scrollBarLooseness = 20;
+	//zoom
+	public static int zoomOffset = 40;
+	public static int zoomX = 75;
+	public static int zoomWidth = 400;
+	public static int zoomHeight = 20;
+	public static int zoomLooseness = 20;
+	private static float zoomRatio = 1;
+	
+	public static void setZoomRatio(float x){
+		zoomRatio = x;
+	}
 	
 	//colors
 	public static int red = 0xFFFF0000;

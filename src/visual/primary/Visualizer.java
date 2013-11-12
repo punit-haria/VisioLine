@@ -9,7 +9,8 @@ import data.RepoFile;
 import processing.core.*;
 import visual.primary.Constants;
 import visual.primary.Constants.Colour;
-import visual.ui.HorizontalScrollBar;
+import visual.primary.HorizontalScrollBar;
+import visual.primary.Zoom;
 
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
@@ -18,8 +19,9 @@ public class Visualizer extends PApplet {
 	private HashMap<String,Integer> authorColorScheme = null;
 	//set of fileBars
 	private FileDisplayContainer displayFiles = null;
-	//horizontal scroll bar
+	//horizontal scroll bar and zooming
 	HorizontalScrollBar hscroll;
+	Zoom hzoom;
 	
 	public Visualizer(ArrayList<String> authorList, 
 			ArrayList<RepoFile> repfiles){
@@ -41,6 +43,8 @@ public class Visualizer extends PApplet {
 		hscroll = new HorizontalScrollBar(Constants.horizontalScrollBarX, 
 				hscrollOffset, Constants.scrollBarWidth, Constants.scrollBarHeight,
 				Constants.scrollBarLooseness, this);
+		hzoom = new Zoom(Constants.zoomX, hscrollOffset+Constants.zoomOffset,
+				Constants.zoomWidth, Constants.zoomHeight, Constants.zoomLooseness, this);
 	}
 		
 	@Override
@@ -48,11 +52,13 @@ public class Visualizer extends PApplet {
 		//refresh screen
 		background(Constants.white);	
 		//display files
+		hzoom.updateZoomRatio();
 		int filesPosX = Constants.fileDisplayStartX -
 			(int)(hscroll.getSliderPos()*displayFiles.getLength());
 		displayFiles.display(filesPosX,Constants.fileDisplayStartY);			
 		//display scroll bar
 		hscroll.display();
+		hzoom.display();
 	}
 	
 	//get corresponding color for author

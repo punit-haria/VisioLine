@@ -11,23 +11,25 @@ public class FileDisplayContainer {
 	private Visualizer parent;
 	//collection of LineStripes
 	private ArrayList<FileBar> files;
-	//length of display container
-	private float length;
 	
 	public FileDisplayContainer(ArrayList<RepoFile> repfiles, Visualizer v){
 		this.parent = v;
 		files = new ArrayList<FileBar>();
 		Iterator<RepoFile> iter = repfiles.iterator();
-		length = 0f;
 		while(iter.hasNext()){
 			RepoFile file = iter.next();
 			FileBar fb = new FileBar(parent, file);
-			length += fb.getWidth() + Constants.fileBarSpacing;
 			files.add(fb);			
 		}
 	}
 	
 	public float getLength(){
+		Iterator<FileBar> iter = files.iterator();
+		float length = 0f;
+		while(iter.hasNext()){
+			FileBar fb = iter.next();
+			length += fb.getWidth() + Constants.getFileBarSpacing();
+		}
 		return length;
 	}
 
@@ -38,7 +40,7 @@ public class FileDisplayContainer {
 		while(it.hasNext()){
 			FileBar fbar = it.next();
 			fbar.display(xx + offset, yy);
-			offset += Constants.fileBarSpacing + fbar.getWidth();
+			offset += Constants.getFileBarSpacing() + fbar.getWidth();
 			//fbar.display(xx, yy + offset);
 			//offset += Constants.lineStripeHeight+25;
 		}
