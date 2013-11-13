@@ -118,6 +118,7 @@ public class RepoFileManager {
 
 		// prints out relevant commits (changed file commits)
 		for (RevCommit revCommit : revWalk) {
+			
 			commits.add(revCommit.toObjectId().getName());
 		}
 		return (commits);

@@ -1,10 +1,17 @@
 package presentation;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -15,7 +22,6 @@ import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import visual.primary.Visualizer;
-
 import data.RepoFile;
 import data.RepoFileManager;
 
@@ -25,8 +31,10 @@ public class MainForGUI extends Frame {
 	private static String gitPath;
 	Panel panel;
 	Button b1,b2;
-	public MainForGUI(ArrayList<String> authorList, 
-			ArrayList<RepoFile> repfiles)
+	 
+	private ArrayList<RepoFile> repfiles;
+	private ArrayList<String> authorList;
+	public MainForGUI()
 	{
 
 		// Set frame properties
@@ -45,9 +53,27 @@ public class MainForGUI extends Frame {
 
 		// Create buttons
 		b1=new Button(); // Create a button with default constructor
-		b1.setLabel("I am button 1"); // Set the text for button
+		b1.addActionListener(new ActionListener() {
+	       	@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+	       		loadData();
+				
+			}
+	    });
+		b1.setLabel("input data"); // Set the text for button
 
-		b2=new Button("Button 2"); // Create a button with sample text
+		b2=new Button("play"); // Create a button with sample text
+		b2.addActionListener(new ActionListener() {
+	       	@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+	       		play();
+				
+			}
+
+		 
+	    });
 		b2.setBackground(Color.lightGray); // Set the background to the button
 
 		// Add the buttons to the panel
@@ -65,15 +91,40 @@ public class MainForGUI extends Frame {
 		});
 
 		//Test visualization
-		Visualizer vis = new Visualizer(authorList,repfiles);
-		this.add(vis,BorderLayout.CENTER);
-		vis.init();
+	
 	}
 
 
 
-	public static void main(String args[])
-	{
+	protected void play() {
+		// TODO Auto-generated method stub
+		FileInputStream fileIn;
+		try {
+			fileIn = new FileInputStream("c:/Users/hai/git/VisioLine/documents/fileList.ser");
+			ObjectInputStream file_in = new ObjectInputStream(fileIn);
+	        repfiles = (ArrayList<RepoFile>) file_in.readObject();
+	        file_in.close();
+	        fileIn.close();
+	        fileIn = new FileInputStream("c:/Users/hai/git/VisioLine/documents/authorList.ser");
+			ObjectInputStream author_in = new ObjectInputStream(fileIn);
+	        authorList = (ArrayList<String>) author_in.readObject();
+	        file_in.close();
+	        fileIn.close();
+	    	Visualizer vis = new Visualizer(authorList,repfiles);
+			this.add(vis,BorderLayout.CENTER);
+		    vis.init();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		
+	}
+
+
+
+	protected void loadData() {
+		// TODO Auto-generated method stub
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Select target directory");
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -137,12 +188,36 @@ public class MainForGUI extends Frame {
 			authors.add("masensio");
 			authors.add("zerginator");
 			
-			new MainForGUI(authors,fileList);
+			 
+		         FileOutputStream fileOut =
+		         new FileOutputStream("c:/Users/hai/git/VisioLine/documents/fileList.ser");
+		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		         out.writeObject(fileList);
+		         out.close();
+		         fileOut.close();
+		         System.out.printf("Serialized data is saved in c:/Users/hai/git/VisoLine/documents/fileList.ser\n");
+		         FileOutputStream authorOut =
+				         new FileOutputStream("c:/Users/hai/git/VisioLine/documents/authorList.ser");
+				         ObjectOutputStream a_out = new ObjectOutputStream(authorOut);
+				        a_out.writeObject(authors);
+				         a_out.close();
+				         fileOut.close();
+				         System.out.printf("Serialized data is saved in c:/Users/hai/git/VisoLine/documents/authorList.ser\n");
+		     
 					
 		} catch (RevisionSyntaxException | GitAPIException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+	}
+
+
+
+	public static void main(String args[])
+	{
+		new MainForGUI();
 		
 		
 	}

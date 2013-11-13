@@ -1,6 +1,7 @@
 package data;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
-public class RepoFile implements Iterable<Line> {
+public class RepoFile implements Iterable<Line>,Serializable {
 
 	private String fileName;
 	private String commitId;

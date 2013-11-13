@@ -1,6 +1,8 @@
 package data;
 
-public class Line {
+import java.io.Serializable;
+
+public class Line implements Serializable {
 	
 	private String commitId;
 	private String author;
