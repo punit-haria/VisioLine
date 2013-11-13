@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.JFileChooser;
@@ -109,6 +110,7 @@ public class MainForGUI extends Frame {
     		fileIn = new FileInputStream(repo_out_File);
 			ObjectInputStream file_in = new ObjectInputStream(fileIn);
 	        repfiles = (ArrayList<RepoFile>) file_in.readObject();
+	        Collections.sort(repfiles, RepoFile.Comparators.COMMITS);
 	        file_in.close();
 	        fileIn.close();
 			}
@@ -125,6 +127,7 @@ public class MainForGUI extends Frame {
 	        author_in.close();
 	        fileIn.close();
 			}
+			
 	    	Visualizer vis = new Visualizer(authorList,repfiles);
 			this.add(vis,BorderLayout.CENTER);
 		    vis.init();

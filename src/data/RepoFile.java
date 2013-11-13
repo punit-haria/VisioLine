@@ -3,6 +3,7 @@ package data;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -31,7 +32,7 @@ public class RepoFile implements Iterable<Line>,Serializable {
 
 	private String fileName;
 	private String commitId;
-
+private int commitNum;
 	// change to whatever data structure is most suitable
 	private ArrayList<Line> lines;
 
@@ -45,6 +46,7 @@ public class RepoFile implements Iterable<Line>,Serializable {
 			AmbiguousObjectException, IncorrectObjectTypeException, IOException {
 		this.fileName = name;
 		this.commitId = commitId;
+		commitNum=0;
 		// create list of line objects
 		this.lines = populateLineInfo(repo);
 	}
@@ -78,8 +80,9 @@ public class RepoFile implements Iterable<Line>,Serializable {
 		for (int i = 0; i < result.size(); ++i) {
 			lineChanges.add(0);
 		}
-		
+		 
 		for (RevCommit currentCommit : revWalk) {
+			 commitNum++;
 			RawText text = getText(blamer, currentCommit);
 			//old new
 			EditList diffList = getEditList(text, result);
@@ -185,5 +188,14 @@ public class RepoFile implements Iterable<Line>,Serializable {
 	public String getCommitId() {
 		return commitId;
 	}
+	public static class Comparators {
 
+        public static Comparator<RepoFile> COMMITS = new Comparator<RepoFile>() {
+            @Override
+            public int compare(RepoFile f1, RepoFile f2) {
+                return f1.commitNum-f2.commitNum ;
+            }
+        };
+        
+    }
 }
