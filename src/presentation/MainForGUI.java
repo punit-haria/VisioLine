@@ -100,16 +100,31 @@ public class MainForGUI extends Frame {
 		// TODO Auto-generated method stub
 		FileInputStream fileIn;
 		try {
-			fileIn = new FileInputStream("c:/Users/hai/git/VisioLine/documents/fileList.ser");
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Select target directory");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int returnVal = chooser.showOpenDialog(new Frame());
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				File repo_out_File = chooser.getSelectedFile();
+    		fileIn = new FileInputStream(repo_out_File);
 			ObjectInputStream file_in = new ObjectInputStream(fileIn);
 	        repfiles = (ArrayList<RepoFile>) file_in.readObject();
 	        file_in.close();
 	        fileIn.close();
-	        fileIn = new FileInputStream("c:/Users/hai/git/VisioLine/documents/authorList.ser");
+			}
+			 chooser = new JFileChooser();
+			chooser.setDialogTitle("Select target directory");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			 returnVal = chooser.showOpenDialog(new Frame());
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				File author_out_File = chooser.getSelectedFile();
+		fileIn = new FileInputStream(author_out_File);
+			 
 			ObjectInputStream author_in = new ObjectInputStream(fileIn);
 	        authorList = (ArrayList<String>) author_in.readObject();
-	        file_in.close();
+	        author_in.close();
 	        fileIn.close();
+			}
 	    	Visualizer vis = new Visualizer(authorList,repfiles);
 			this.add(vis,BorderLayout.CENTER);
 		    vis.init();
@@ -187,22 +202,31 @@ public class MainForGUI extends Frame {
 			authors.add("jmiazga");
 			authors.add("masensio");
 			authors.add("zerginator");
-			
-			 
-		         FileOutputStream fileOut =
-		         new FileOutputStream("c:/Users/hai/git/VisioLine/documents/fileList.ser");
+			//to do 
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int retrival=chooser.showSaveDialog(null);
+			if(retrival == JFileChooser.APPROVE_OPTION){
+				File repoSaveFile = chooser.getSelectedFile();
+				 FileOutputStream fileOut =
+		         new FileOutputStream(repoSaveFile);
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(fileList);
 		         out.close();
 		         fileOut.close();
-		         System.out.printf("Serialized data is saved in c:/Users/hai/git/VisoLine/documents/fileList.ser\n");
-		         FileOutputStream authorOut =
-				         new FileOutputStream("c:/Users/hai/git/VisioLine/documents/authorList.ser");
+			}
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			 retrival=chooser.showSaveDialog(null);
+			if(retrival == JFileChooser.APPROVE_OPTION){
+				File authSaveFile = chooser.getSelectedFile();
+				 FileOutputStream authorOut =
+				         new FileOutputStream(authSaveFile );
 				         ObjectOutputStream a_out = new ObjectOutputStream(authorOut);
 				        a_out.writeObject(authors);
 				         a_out.close();
-				         fileOut.close();
-				         System.out.printf("Serialized data is saved in c:/Users/hai/git/VisoLine/documents/authorList.ser\n");
+				         authorOut.close();
+				        
+			}
+		        
 		     
 					
 		} catch (RevisionSyntaxException | GitAPIException | IOException e) {
