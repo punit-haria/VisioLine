@@ -25,7 +25,7 @@ public class FileBar {
 	public FileBar(Visualizer v, RepoFile file) {
 		this.parent = v;
 		this.numberOfLines = file.size();
-		this.fileName = file.getFileName();
+		this.fileName = file.getFileName()+" "+file.getCommitNum();
 		//construct LineStripes
 		stripes = new ArrayList<LineStripe>();
 		Iterator<Line> it = file.iterator();

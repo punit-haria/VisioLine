@@ -181,6 +181,9 @@ private int commitNum;
 	public String getFileName() {
 		return fileName;
 	}
+	public int getCommitNum(){
+		return  commitNum;
+	}
 
 	/*
 	 * return commitId given
