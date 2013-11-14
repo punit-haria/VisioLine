@@ -40,7 +40,7 @@ public class FileBar {
 				maxLineChanged = currMax;
 			}
 		}
-		absoluteHeight = maxLineChanged;
+		absoluteHeight = maxLineChanged;//initialize value
 	}
 
 	//display-width of FileBar
@@ -80,20 +80,52 @@ public class FileBar {
 	
 	private class LineStripe {
 		
-		//reference to corresponding Line object
-		private Line line; 
-		//hexadecimal valued color
-		private int lineColor;
+		//segments that make up this line
+		private ArrayList<Segment> segs;
 		
-		private LineStripe(Line l){
-			this.line = l;
-			this.lineColor = parent.getAuthorColor(line.getAuthor());
+		private LineStripe(Line line){
+			segs = new ArrayList<Segment>();
+			Iterator<String> authIt = line.getAuthors();
+			Iterator<String> commIt = line.getCommitIds();
+			int pos = 1;
+			while(authIt.hasNext()){
+				String author = authIt.next();
+				String commitId = commIt.next();
+				Segment segment = new Segment(author,commitId,pos);
+				segs.add(segment);
+				pos++;
+			}
 		}	
 		
 		private void display(float xx, float yy){
-			parent.fill(lineColor);
-			float height = Constants.lineStripeHeight * ((float)(line.getTimesChanged()+1)/(float)absoluteHeight);
-			parent.rect(xx,yy+(Constants.lineStripeHeight-height),Constants.getLineStripeWidth(),height);
+			Iterator<Segment> iter = segs.iterator();
+			while(iter.hasNext()){
+				Segment sm = iter.next();
+				sm.display(xx,yy);
+			}
+		}
+		
+		private class Segment {
+			
+			//hexadecimal valued color
+			private int lineColor;
+			//commit id
+			private String commitId;
+			//position in Line
+			private int position;
+			
+			private Segment(String author, String commit, int pos){
+				this.lineColor = parent.getAuthorColor(author);
+				this.position = pos;
+			}
+			
+			private void display(float xx, float yy){
+				parent.fill(lineColor);
+				float height = Constants.lineStripeHeight * (1/(float)absoluteHeight);
+				parent.rect(xx,yy+Constants.lineStripeHeight-(height*position),
+						Constants.getLineStripeWidth(),height);
+			}
+			
 		}
 		
 	}

@@ -1,6 +1,8 @@
 package data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Line implements Serializable {
 	
@@ -10,6 +12,18 @@ public class Line implements Serializable {
 	private String lineValue;
 	private int timesChanged;
 	private String codeType;
+	
+	//replace "author" and "commitId" with the following:
+	private ArrayList<String> authors; //list of authors in order of last commit
+	private ArrayList<String> commitIds;//corresponding commit ids
+	
+	public Iterator<String> getAuthors() {
+		return authors.iterator();
+	}
+
+	public Iterator<String> getCommitIds() {
+		return commitIds.iterator();
+	}	
 	
 	public Line(String commitId, String author,
 			int lineNumber, String lineValue, int changes, String codeType){

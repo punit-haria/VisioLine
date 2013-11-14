@@ -49,8 +49,6 @@ public class FileDisplayContainer {
 			FileBar fbar = it.next();
 			fbar.display(xx + offset, yy);
 			offset += Constants.getFileBarSpacing() + fbar.getWidth();
-			//fbar.display(xx, yy + offset);
-			//offset += Constants.lineStripeHeight+25;
 		}
 	}
 

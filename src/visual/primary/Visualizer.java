@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import data.Line;
 import data.RepoFile;
 
 import processing.core.*;
@@ -20,11 +21,17 @@ public class Visualizer extends PApplet {
 	//set of fileBars
 	private FileDisplayContainer displayFiles = null;
 	//horizontal scroll bar and zooming
-	HorizontalScrollBar hscroll;
-	Zoom hzoom;
+	private HorizontalScrollBar hscroll;
+	private Zoom hzoom;
+	//list of commit ids
+	private ArrayList<String> listOfCommitIds;
+	
+	public Iterator<String> getCommitIds() {
+		return listOfCommitIds.iterator();
+	}
 	
 	public Visualizer(ArrayList<String> authorList, 
-			ArrayList<RepoFile> repfiles){
+			ArrayList<RepoFile> repfiles){ //add listOfCommitIds as argument!!!
 		super();				
 		mapAuthorsToColors(authorList);		
 		displayFiles = new FileDisplayContainer(repfiles, this);		
@@ -116,5 +123,7 @@ public class Visualizer extends PApplet {
 			authorColorScheme.put(author,colr);
 		}
 	}
+
+
 	
 }
