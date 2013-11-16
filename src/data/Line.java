@@ -42,6 +42,10 @@ public class Line implements Serializable {
 	public int getCodeType() {
 		return codeType;
 	}
+	
+	public int getTimesChanged() {
+		return authors.size();
+	}
 
 	/*
 	 * Ordered by newest first
