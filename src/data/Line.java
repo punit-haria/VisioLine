@@ -6,6 +6,12 @@ import java.util.Iterator;
 
 public class Line implements Serializable {
 	
+	
+	/**
+	 * serialization ID
+	 */
+	private static final long serialVersionUID = 3022542689668488155L;
+	
 	//variable for determining type
 	static int IMPORT_TYPE = 1;
 	static int WHITESPACE_TYPE = 2;
@@ -50,14 +56,14 @@ public class Line implements Serializable {
 	/*
 	 * Ordered by newest first
 	 */
-	public Iterator<String> authorIterator() {
+	public Iterator<String> getAuthors() {
 		return authors.iterator();
 	}
 
 	/*
 	 * Ordered by newest first
 	 */
-	public Iterator<String> commitIterator() {
+	public Iterator<String> getCommitIds() {
 		return commits.iterator();
 	}
 }

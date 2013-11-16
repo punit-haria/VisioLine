@@ -28,16 +28,22 @@ import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
-public class RepoFile implements Iterable<Line>,Serializable {
+public class RepoFile implements Iterable<Line>, Serializable {
 
+	/**
+	 * serialization ID
+	 */
+	private static final long serialVersionUID = 5528537749976601214L;
+	
 	private String fileName;
 	private String commitId;
-private int commitNum;
+	private int commitNum;
 	// change to whatever data structure is most suitable
 	private ArrayList<Line> lines;
 
 	/*
 	 * @param name is a the files relative path
+	 * 
 	 * @param commitId must be a commit within this file's history otherwise
 	 * this function will result in an error.
 	 */
@@ -46,7 +52,7 @@ private int commitNum;
 			AmbiguousObjectException, IncorrectObjectTypeException, IOException {
 		this.fileName = name;
 		this.commitId = commitId;
-		commitNum=0;
+		commitNum = 0;
 		// create list of line objects
 		this.lines = populateLineInfo(repo);
 	}
@@ -58,7 +64,7 @@ private int commitNum;
 			throws RevisionSyntaxException, MissingObjectException,
 			IncorrectObjectTypeException, AmbiguousObjectException,
 			IOException, GitAPIException {
-		
+
 		// obtain blame information
 		BlameCommand blamer = new BlameCommand(repo);
 		ObjectId commitID = repo.resolve(commitId);
@@ -66,7 +72,7 @@ private int commitNum;
 		blamer.setFilePath(fileName);
 		BlameResult blame = blamer.call();
 		RawText result = blame.getResultContents();
-		
+
 		// getting number of changes information
 		RevWalk revWalk = new RevWalk(repo);
 		RevCommit root = revWalk.parseCommit(commitID);
@@ -74,65 +80,87 @@ private int commitNum;
 		revWalk.setTreeFilter(AndTreeFilter.create(PathFilter.create(fileName),
 				TreeFilter.ANY_DIFF));
 
-		ArrayList<Integer> lineChanges = new ArrayList<Integer>(result.size());
+		// variable for storing changes information
+		ArrayList<ArrayList<String>> lineChanges = new ArrayList<ArrayList<String>>(
+				result.size());
+		ArrayList<ArrayList<String>> lineCommits = new ArrayList<ArrayList<String>>(
+				result.size());
 		HashMap<Integer, String> changesLog = new HashMap<Integer, String>();
-		
+
+		// initialize
 		for (int i = 0; i < result.size(); ++i) {
-			lineChanges.add(0);
+			RevCommit currentCommit = blame.getSourceCommit(i);
+			PersonIdent currentAuthor = blame.getSourceAuthor(i);
+			lineChanges.get(i).add(currentAuthor.getName());
+			lineCommits.get(i).add(currentCommit.getName());
 		}
-		 
+
 		for (RevCommit currentCommit : revWalk) {
-			 commitNum++;
+			commitNum++;
 			RawText text = getText(blamer, currentCommit);
-			//old new
+			// old new
 			EditList diffList = getEditList(text, result);
-			
+
 			for (Edit edits : diffList) {
 				int start = edits.getBeginB();
 				int end = edits.getEndB();
 				int startOld = edits.getBeginA();
 				int endOld = edits.getEndA();
+				String currentAuthor = blame.getSourceAuthor(startOld)
+						.getName();
+				String currentCommitID = blame.getSourceCommit(startOld)
+						.getName();
+
 				String changesStr = "";
-				for(int i = startOld; i < endOld; ++i){
+				for (int i = startOld; i < endOld; ++i) {
 					changesStr = changesStr + text.getString(i) + "\n";
 				}
-				
+
 				if (changesLog.containsKey(start)) {
 					if (!changesLog.get(start).equals(changesStr)) {
 						changesLog.put(start, changesStr);
 						for (int i = start; i < end; ++i) {
-							lineChanges.set(i, lineChanges.get(i) + 1);
+							lineChanges.get(i).add(currentAuthor);
+							lineCommits.get(i).add(currentCommitID);
 						}
 					}
 				} else {
 					changesLog.put(start, changesStr);
 					for (int i = start; i < end; ++i) {
-						lineChanges.set(i, lineChanges.get(i) + 1);
+						lineChanges.get(i).add(currentAuthor);
+						lineCommits.get(i).add(currentCommitID);
 					}
 				}
 			}
 		}
-		
+
 		// populate list
 		ArrayList<Line> lines = new ArrayList<Line>(result.size());
 
 		for (int i = 0; i < result.size(); ++i) {
-			RevCommit currentCommit = blame.getSourceCommit(i);
-			PersonIdent currentAuthor = blame.getSourceAuthor(i);
-			// pre check if can make a line object
-			if (pre_check_line(currentCommit, currentAuthor,
-					result.getString(i))) {
-				// if can make a line make it
-				lines.add(new Line(currentCommit.getName(), currentAuthor
-						.getName(), i, result.getString(i), lineChanges.get(i), "FILLER"));
-				//TODO add correct line type\
-			} else
-				return lines;// System.out.println("can make a line");// we
-								// handle it later
+			String currentStr = result.getString(i);
+			int type = Line.FUNCTION_TYPE;
+			// determine linetype
+			if (currentStr.matches("^import")) {
+				type = Line.IMPORT_TYPE;
+			}
+			// @TODO check use regex for this
+			else if (currentStr.matches("^\\s*$")) {
+				type = Line.WHITESPACE_TYPE;
+			} else if (currentStr.matches("^\\s*//")
+					|| currentStr.matches("^\\s*\\*")
+					|| currentStr.matches("^\\s*/\\*")) {
+				type = Line.COMMENT_TYPE;
+			}
+
+			// if can make a line make it
+			lines.add(new Line(lineCommits.get(i), lineChanges.get(i), i,
+					result.getString(i), type));
+			// TODO add correct line type\
 		}
 		return lines;
 	}
-	
+
 	private EditList getEditList(RawText textOld, RawText textNew)
 			throws GitAPIException, IOException {
 		EditList diffList = new EditList();
@@ -144,7 +172,8 @@ private int commitNum;
 	/*
 	 * Returns the raw text of a file from a specific commit
 	 */
-	private RawText getText(BlameCommand blamer, RevCommit commit) throws GitAPIException {
+	private RawText getText(BlameCommand blamer, RevCommit commit)
+			throws GitAPIException {
 		// text for older elements
 		blamer.setFilePath(fileName);
 		blamer.setStartCommit(commit);
@@ -181,8 +210,9 @@ private int commitNum;
 	public String getFileName() {
 		return fileName;
 	}
-	public int getCommitNum(){
-		return  commitNum;
+
+	public int getCommitNum() {
+		return commitNum;
 	}
 
 	/*
@@ -191,14 +221,15 @@ private int commitNum;
 	public String getCommitId() {
 		return commitId;
 	}
+
 	public static class Comparators {
 
-        public static Comparator<RepoFile> COMMITS = new Comparator<RepoFile>() {
-            @Override
-            public int compare(RepoFile f1, RepoFile f2) {
-                return f1.commitNum-f2.commitNum ;
-            }
-        };
-        
-    }
+		public static Comparator<RepoFile> COMMITS = new Comparator<RepoFile>() {
+			@Override
+			public int compare(RepoFile f1, RepoFile f2) {
+				return f1.commitNum - f2.commitNum;
+			}
+		};
+
+	}
 }
