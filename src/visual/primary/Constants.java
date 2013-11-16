@@ -32,6 +32,13 @@ class Constants {
 	public static int zoomHeight = 20;
 	public static int zoomLooseness = 20;
 	private static float zoomRatio = 1;
+	//timeline
+	public static int timeOffset = 40;
+	public static int timeX = 75;
+	public static int timeWidth = 400;
+	public static int timeHeight = 20;
+	public static int timeLooseness = 10;
+	private static float timeRatio = 1;
 	
 	public static void setZoomRatio(float x){
 		zoomRatio = x;

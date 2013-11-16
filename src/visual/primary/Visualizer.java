@@ -23,6 +23,8 @@ public class Visualizer extends PApplet {
 	//horizontal scroll bar and zooming
 	private HorizontalScrollBar hscroll;
 	private Zoom hzoom;
+	//timeline scrollbar
+	private TimeLine timescroll;
 	//list of commit ids
 	private ArrayList<String> listOfCommitIds;
 	
@@ -31,7 +33,7 @@ public class Visualizer extends PApplet {
 	}
 	
 	public Visualizer(ArrayList<String> authorList, 
-			ArrayList<RepoFile> repfiles){ //add listOfCommitIds as argument!!!
+			ArrayList<RepoFile> repfiles, ArrayList<String> commitIds) {
 		super();				
 		mapAuthorsToColors(authorList);		
 		displayFiles = new FileDisplayContainer(repfiles, this);		
@@ -52,6 +54,9 @@ public class Visualizer extends PApplet {
 				Constants.scrollBarLooseness, this);
 		hzoom = new Zoom(Constants.zoomX, hscrollOffset+Constants.zoomOffset,
 				Constants.zoomWidth, Constants.zoomHeight, Constants.zoomLooseness, this);
+		int toffset = hscrollOffset + Constants.zoomOffset + Constants.zoomWidth + Constants.timeOffset;
+		timescroll = new TimeLine(Constants.timeX, toffset,
+				Constants.timeWidth, Constants.timeHeight, Constants.timeLooseness, this);
 	}
 		
 	@Override
@@ -66,6 +71,7 @@ public class Visualizer extends PApplet {
 		//display scroll bar
 		hscroll.display();
 		hzoom.display();
+		timescroll.display();
 	}
 	
 	//get corresponding color for author
