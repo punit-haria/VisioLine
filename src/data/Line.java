@@ -2,7 +2,7 @@ package data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.ListIterator;
 
 public class Line implements Serializable {
 	
@@ -56,14 +56,14 @@ public class Line implements Serializable {
 	/*
 	 * Ordered by newest first
 	 */
-	public Iterator<String> getAuthors() {
-		return authors.iterator();
+	public ListIterator<String> getAuthors() {
+		return authors.listIterator(authors.size());
 	}
 
 	/*
 	 * Ordered by newest first
 	 */
-	public Iterator<String> getCommitIds() {
-		return commits.iterator();
+	public ListIterator<String> getCommitIds() {
+		return commits.listIterator(commits.size());
 	}
 }

@@ -2,6 +2,7 @@ package visual.primary;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import data.RepoFile;
 import data.Line;
@@ -85,12 +86,12 @@ public class FileBar {
 		
 		private LineStripe(Line line){
 			segs = new ArrayList<Segment>();
-			Iterator<String> authIt = line.getAuthors();
-			Iterator<String> commIt = line.getCommitIds();
+			ListIterator<String> authIt = line.getAuthors();
+			ListIterator<String> commIt = line.getCommitIds();
 			int pos = 1;
-			while(authIt.hasNext()){
-				String author = authIt.next();
-				String commitId = commIt.next();
+			while(authIt.hasPrevious()){
+				String author = authIt.previous();
+				String commitId = commIt.previous();
 				Segment segment = new Segment(author,commitId,pos);
 				segs.add(segment);
 				pos++;
@@ -115,7 +116,7 @@ public class FileBar {
 			private int position;
 			
 			private Segment(String author, String commit, int pos){
-				this.lineColor = parent.getAuthorColor(author);
+				this.lineColor = parent.getAuthorColor(author);				
 				this.position = pos;
 			}
 			
