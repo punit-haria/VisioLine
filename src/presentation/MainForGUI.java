@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
@@ -101,6 +102,7 @@ public class MainForGUI extends Frame {
 		// TODO Auto-generated method stub
 		FileInputStream fileIn;
 		try {
+			JOptionPane.showMessageDialog(null, "load the object from filename.ser");
 			JFileChooser chooser = new JFileChooser();
 			chooser.setDialogTitle("Select target directory");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -111,10 +113,11 @@ public class MainForGUI extends Frame {
 			ObjectInputStream file_in = new ObjectInputStream(fileIn);
 	        repfiles = (ArrayList<RepoFile>) file_in.readObject();
 	        Collections.sort(repfiles, RepoFile.Comparators.COMMITS);
+	        authorList = (ArrayList<String>) file_in.readObject();
 	        file_in.close();
 	        fileIn.close();
 			}
-			 chooser = new JFileChooser();
+			/* chooser = new JFileChooser();
 			chooser.setDialogTitle("Select target directory");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			 returnVal = chooser.showOpenDialog(new Frame());
@@ -126,7 +129,7 @@ public class MainForGUI extends Frame {
 	        authorList = (ArrayList<String>) author_in.readObject();
 	        author_in.close();
 	        fileIn.close();
-			}
+			}*/
 			
 	    	Visualizer vis = new Visualizer(authorList,repfiles);
 			this.add(vis,BorderLayout.CENTER);
@@ -206,30 +209,30 @@ public class MainForGUI extends Frame {
 			authors.add("masensio");
 			authors.add("zerginator");
 			//to do 
+			JOptionPane.showMessageDialog(null, "save the object in filename.ser");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int retrival=chooser.showSaveDialog(null);
 			if(retrival == JFileChooser.APPROVE_OPTION){
 				File repoSaveFile = chooser.getSelectedFile();
-				 FileOutputStream fileOut =
-		         new FileOutputStream(repoSaveFile);
+				 FileOutputStream fileOut =new FileOutputStream(repoSaveFile);
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(fileList);
+		         out.writeObject(authors);
 		         out.close();
 		         fileOut.close();
 			}
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		/*	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			 retrival=chooser.showSaveDialog(null);
 			if(retrival == JFileChooser.APPROVE_OPTION){
 				File authSaveFile = chooser.getSelectedFile();
-				 FileOutputStream authorOut =
-				         new FileOutputStream(authSaveFile );
+				 FileOutputStream authorOut =new FileOutputStream(authSaveFile );
 				         ObjectOutputStream a_out = new ObjectOutputStream(authorOut);
 				        a_out.writeObject(authors);
 				         a_out.close();
 				         authorOut.close();
 				        
 			}
-		        
+		        */
 		     
 					
 		} catch (RevisionSyntaxException | GitAPIException | IOException e) {
