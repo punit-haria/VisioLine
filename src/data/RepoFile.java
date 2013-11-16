@@ -95,8 +95,13 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			ArrayList<String> changes = new ArrayList<String>();
 			ArrayList<String> commits = new ArrayList<String>();
 
-			changes.add(currentAuthor.getName());
-			commits.add(currentCommit.getName());
+			// @TODO try to figure out why there are some lines with missing
+			// fields
+			if (pre_check_line(currentCommit, currentAuthor,
+					result.getString(i))) {
+				changes.add(currentAuthor.getName());
+				commits.add(currentCommit.getName());
+			}
 
 			lineChanges.add(changes);
 			lineCommits.add(commits);
@@ -113,29 +118,32 @@ public class RepoFile implements Iterable<Line>, Serializable {
 				int end = edits.getEndB();
 				int startOld = edits.getBeginA();
 				int endOld = edits.getEndA();
-				String currentAuthor = blame.getSourceAuthor(startOld)
-						.getName();
-				String currentCommitID = blame.getSourceCommit(startOld)
-						.getName();
 
-				String changesStr = "";
-				for (int i = startOld; i < endOld; ++i) {
-					changesStr = changesStr + text.getString(i) + "\n";
-				}
+				PersonIdent oldAuthor = blame.getSourceAuthor(startOld);
+				RevCommit oldCommit = blame.getSourceCommit(startOld);
 
-				if (changesLog.containsKey(start)) {
-					if (!changesLog.get(start).equals(changesStr)) {
+				if (pre_check_line(oldCommit, oldAuthor,
+						text.getString(startOld))) {
+
+					String changesStr = "";
+					for (int i = startOld; i < endOld; ++i) {
+						changesStr = changesStr + text.getString(i) + "\n";
+					}
+
+					if (changesLog.containsKey(start)) {
+						if (!changesLog.get(start).equals(changesStr)) {
+							changesLog.put(start, changesStr);
+							for (int i = start; i < end; ++i) {
+								lineChanges.get(i).add(oldAuthor.getName());
+								lineCommits.get(i).add(oldCommit.getName());
+							}
+						}
+					} else {
 						changesLog.put(start, changesStr);
 						for (int i = start; i < end; ++i) {
-							lineChanges.get(i).add(currentAuthor);
-							lineCommits.get(i).add(currentCommitID);
+							lineChanges.get(i).add(oldAuthor.getName());
+							lineCommits.get(i).add(oldCommit.getName());
 						}
-					}
-				} else {
-					changesLog.put(start, changesStr);
-					for (int i = start; i < end; ++i) {
-						lineChanges.get(i).add(currentAuthor);
-						lineCommits.get(i).add(currentCommitID);
 					}
 				}
 			}
