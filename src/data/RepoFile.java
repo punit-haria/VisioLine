@@ -34,7 +34,7 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	 * serialization ID
 	 */
 	private static final long serialVersionUID = 5528537749976601214L;
-	
+
 	private String fileName;
 	private String commitId;
 	private int commitNum;
@@ -91,8 +91,15 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		for (int i = 0; i < result.size(); ++i) {
 			RevCommit currentCommit = blame.getSourceCommit(i);
 			PersonIdent currentAuthor = blame.getSourceAuthor(i);
-			lineChanges.get(i).add(currentAuthor.getName());
-			lineCommits.get(i).add(currentCommit.getName());
+
+			ArrayList<String> changes = new ArrayList<String>();
+			ArrayList<String> commits = new ArrayList<String>();
+
+			changes.add(currentAuthor.getName());
+			commits.add(currentCommit.getName());
+
+			lineChanges.add(changes);
+			lineCommits.add(commits);
 		}
 
 		for (RevCommit currentCommit : revWalk) {
