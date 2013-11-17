@@ -2,7 +2,9 @@ package visual.primary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import data.Line;
 import data.RepoFile;
@@ -27,16 +29,32 @@ public class Visualizer extends PApplet {
 	private TimeLine timescroll;
 	//list of commit ids
 	private ArrayList<String> listOfCommitIds;
+	private int totalTime;
+	private int prevTime;
+	private int currTime;
+	private ListIterator<String> timePos;
+	private HashSet<String> commitSet;
 	
-	public Iterator<String> getCommitIds() {
-		return listOfCommitIds.iterator();
+	//Checks if the timeline scrollbar is consistent with a particular commitId
+	public boolean isCommitIdValid(String commitId){
+		return commitSet.contains(commitId);
 	}
 	
 	public Visualizer(ArrayList<String> authorList, 
 			ArrayList<RepoFile> repfiles, ArrayList<String> commitIds) {
 		super();				
 		mapAuthorsToColors(authorList);		
-		displayFiles = new FileDisplayContainer(repfiles, this);		
+		displayFiles = new FileDisplayContainer(repfiles, this);	
+		this.listOfCommitIds = commitIds;
+		this.currTime = listOfCommitIds.size();
+		this.prevTime = listOfCommitIds.size();
+		this.totalTime = listOfCommitIds.size();
+		this.timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
+		this.commitSet = new HashSet<String>();
+		Iterator<String> iter = listOfCommitIds.iterator();
+		while(iter.hasNext()){
+			commitSet.add(iter.next());
+		}
 	}
 	
 	@Override
@@ -44,7 +62,7 @@ public class Visualizer extends PApplet {
 		//resizability
 		if(frame != null){
 			frame.setResizable(true);
-		}	
+		}		
 		
 		//horizontal scroll bar
 		int hscrollOffset = (int) (Constants.lineStripeHeight + 
@@ -54,11 +72,11 @@ public class Visualizer extends PApplet {
 				Constants.scrollBarLooseness, this);
 		hzoom = new Zoom(Constants.zoomX, hscrollOffset+Constants.zoomOffset,
 				Constants.zoomWidth, Constants.zoomHeight, Constants.zoomLooseness, this);
-		int toffset = hscrollOffset + Constants.zoomOffset + Constants.zoomWidth + Constants.timeOffset;
+		int toffset = hscrollOffset + Constants.zoomOffset + Constants.zoomHeight + Constants.timeOffset;
 		timescroll = new TimeLine(Constants.timeX, toffset,
 				Constants.timeWidth, Constants.timeHeight, Constants.timeLooseness, this);
 	}
-		
+
 	@Override
 	public void draw() {
 		//refresh screen
@@ -71,7 +89,29 @@ public class Visualizer extends PApplet {
 		//display scroll bar
 		hscroll.display();
 		hzoom.display();
+		//timeline
 		timescroll.display();
+		currTime = (int)(timescroll.getSliderPos() * totalTime);
+		int diff = prevTime - currTime;
+		if(diff > 0){
+			for(int i = 0; i < diff; i++){
+				if(timePos.hasPrevious()){
+					String t = timePos.previous();
+					commitSet.remove(t);
+				}
+				else timePos = listOfCommitIds.listIterator();
+			}
+		}
+		else if(diff < 0){
+			for(int i = -diff; i > 0; i--){
+				if(timePos.hasNext()){
+					String t = timePos.next();
+					commitSet.add(t);
+				}
+				else timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
+			}
+		}
+		prevTime = currTime;		
 	}
 	
 	//get corresponding color for author
@@ -103,6 +143,7 @@ public class Visualizer extends PApplet {
 				int originalColor = c.get();
 				for(int i = perColor; i > 1; i--){
 					int offset = (int)(Colour.offset()*((double)i/perColor));
+					//int offset = (int)(Colour.offset());
 					int currentColor = originalColor;
 					for(int j = 4; j >= 0; j -= 2){
 						int temp = Math.max(((int)Math.pow(0x10,j))*offset,0x0);

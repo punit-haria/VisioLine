@@ -118,13 +118,16 @@ public class FileBar {
 			private Segment(String author, String commit, int pos){
 				this.lineColor = parent.getAuthorColor(author);				
 				this.position = pos;
+				this.commitId = commit;
 			}
-			
+
 			private void display(float xx, float yy){
-				parent.fill(lineColor);
-				float height = Constants.lineStripeHeight * (1/(float)absoluteHeight);
-				parent.rect(xx,yy+Constants.lineStripeHeight-(height*position),
-						Constants.getLineStripeWidth(),height);
+				if(parent.isCommitIdValid(commitId)){
+					parent.fill(lineColor);
+					float height = Constants.lineStripeHeight * (1/(float)absoluteHeight);
+					parent.rect(xx,yy+Constants.lineStripeHeight-(height*position),
+							Constants.getLineStripeWidth(),height);
+				}
 			}
 			
 		}

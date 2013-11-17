@@ -22,10 +22,10 @@ public class TimeLine {
 		sheight = height;
 		xpos = xposition;
 		ypos = yposition-(sheight/2);
-		spos = xpos;
+		spos = xpos + swidth;
 		newspos = spos;
 		sposMin = xpos;
-		sposMax = xpos + swidth - sheight;
+		sposMax = xpos + swidth;
 		loose = looseVal;
 	}
 	
