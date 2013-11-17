@@ -19,6 +19,7 @@ import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 
+
 public class RepoFileManager {
 	private String gitDir;
 	final File gitWorkDir;
@@ -27,6 +28,9 @@ public class RepoFileManager {
 	private Iterable<RevCommit> commits;
 	private LinkedList<String> files;
 
+	/*
+	 * Constructor for the RepoFileManager
+	 */
 	public RepoFileManager(String Dir) throws IOException, GitAPIException {
 		this.gitDir = Dir;
 		this.gitWorkDir = new File(this.gitDir);
@@ -37,14 +41,23 @@ public class RepoFileManager {
 		computeFilesList(gitWorkDir);// to get list of all files in the folder
 	}
 
+	/*   
+	 * get the entire list of committers 
+	 */
 	public Iterable<RevCommit> getCommitList() {
 		return commits;
 	}
-
+    
+	/*
+	 * get a working directory
+	 */
 	public File get_folder() {
 		return this.gitWorkDir;
 	}
-
+    
+	/*
+	 * generates all the files in a directory
+	 */
 	public void computeFilesList(File folder) {
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
@@ -63,12 +76,18 @@ public class RepoFileManager {
 		}
 
 	}
-
+	
+   /*
+    * testing method 
+    */
 	public LinkedList<String> getFullPathofFiles() {// useless method for test
 													// purpose
 		return files;
 	}
 
+	/*
+     * obtain relative path name of files
+	 */
 	public LinkedList<String> getRelevantPathofFiles() {// all jgit method need
 														// relevant path
 		LinkedList<String> shotPathFiles = new LinkedList<String>();
@@ -96,7 +115,10 @@ public class RepoFileManager {
 		return shotPathFiles;
 
 	}
-
+     
+	/*
+	 * Get file repository
+	 */
 	public FileRepository getRepo() {
 		return this.repo;
 	}

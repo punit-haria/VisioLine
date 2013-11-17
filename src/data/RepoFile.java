@@ -46,6 +46,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	 * 
 	 * @param commitId must be a commit within this file's history otherwise
 	 * this function will result in an error.
+	 * 
+	 * Setup the code-base to be used for analysis
 	 */
 	public RepoFile(FileRepository repo, String name, String commitId)
 			throws GitAPIException, RevisionSyntaxException,
@@ -58,7 +60,7 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * Populates lines Array.
+	 * Populates lines Array with the information retrieved from the code-base
 	 */
 	private ArrayList<Line> populateLineInfo(FileRepository repo)
 			throws RevisionSyntaxException, MissingObjectException,
@@ -176,6 +178,9 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		return lines;
 	}
 
+	/*
+	 * Helper method to list the differences in a file between two points in time
+	 */
 	private EditList getEditList(RawText textOld, RawText textNew)
 			throws GitAPIException, IOException {
 		EditList diffList = new EditList();
@@ -214,18 +219,23 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		return lines.size();
 	}
 
-	@Override
+	/*
+	 * creates an iterable Line Object 
+	 */
 	public Iterator<Line> iterator() {
 		return lines.iterator();
 	}
 
 	/*
-	 * returns file name of files
+	 * return file name of files
 	 */
 	public String getFileName() {
 		return fileName;
 	}
 
+	/*
+	 * return number of commits
+	 */
 	public int getCommitNum() {
 		return commitNum;
 	}
@@ -237,6 +247,9 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		return commitId;
 	}
 
+	/*
+	 * Helper method that compares two RepoFiles 
+	 */
 	public static class Comparators {
 
 		public static Comparator<RepoFile> COMMITS = new Comparator<RepoFile>() {

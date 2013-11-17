@@ -2,7 +2,7 @@ package data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.ListIterator;
+import java.util.Iterator;
 
 public class Line implements Serializable {
 	
@@ -36,34 +36,46 @@ public class Line implements Serializable {
 		this.lineValue = lineValue;
 		this.codeType = type;
 	}
-
+	
+	/*
+	 *Get the line number 
+	 */
 	public int getLineNumber() {
 		return lineNumber;
 	}
-
+	
+	/*
+	 *Get the line value
+	 */
 	public String getLineValue() {
 		return lineValue;
 	}
-
+	
+	/*
+	 *Get code type
+	 */
 	public int getCodeType() {
 		return codeType;
 	}
 	
+	/*
+	 *Get number of times that a line is changed
+	 */
 	public int getTimesChanged() {
 		return authors.size();
 	}
 
-	/*
+	/* Get a list of authors
 	 * Ordered by newest first
 	 */
-	public ListIterator<String> getAuthors() {
-		return authors.listIterator(authors.size());
+	public Iterator<String> getAuthors() {
+		return authors.iterator();
 	}
 
-	/*
+	/* Get a list of commit Ids
 	 * Ordered by newest first
 	 */
-	public ListIterator<String> getCommitIds() {
-		return commits.listIterator(commits.size());
+	public Iterator<String> getCommitIds() {
+		return commits.iterator();
 	}
 }
