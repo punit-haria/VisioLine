@@ -36,6 +36,7 @@ public class MainForGUI extends Frame {
 	 
 	private ArrayList<RepoFile> repfiles;
 	private ArrayList<String> authorList;
+	private ArrayList<String> commitsList;
 	public MainForGUI()
 	{
 
@@ -114,6 +115,7 @@ public class MainForGUI extends Frame {
 	        repfiles = (ArrayList<RepoFile>) file_in.readObject();
 	        Collections.sort(repfiles, RepoFile.Comparators.COMMITS);
 	        authorList = (ArrayList<String>) file_in.readObject();
+	        commitsList=(ArrayList<String>) file_in.readObject();
 	        file_in.close();
 	        fileIn.close();
 			}
@@ -131,7 +133,7 @@ public class MainForGUI extends Frame {
 	        fileIn.close();
 			}*/
 			
-	    	Visualizer vis = new Visualizer(authorList,repfiles);
+	    	Visualizer vis = new Visualizer(authorList,repfiles,commitsList);
 			this.add(vis,BorderLayout.CENTER);
 		    vis.init();
 		} catch (IOException | ClassNotFoundException e) {
@@ -162,8 +164,18 @@ public class MainForGUI extends Frame {
 			LinkedList<String> files=rfm.getRelevantPathofFilesByExetension("java");
 
 			Iterable<RevCommit> commits=rfm.getCommitList();
-
-
+		 commitsList=new ArrayList<String>();
+			ArrayList<String> authors = new ArrayList<String>();
+		for(RevCommit commit:commits){
+			String commitId=commit.getName();
+			//System.out.println(commitId);
+			String s=commit.getCommitterIdent().getName();
+			commitsList.add(commitId);
+			if(!authors.contains(s)){
+			authors.add(s);
+			//System.out.println(s);
+			} 
+		}
 			//visualizer
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
 			
@@ -188,7 +200,7 @@ public class MainForGUI extends Frame {
 					
 			}
 			
-			ArrayList<String> authors = new ArrayList<String>();
+/*	 ArrayList<String> authors = new ArrayList<String>();
 			
 			authors.add("Bartek Przybylski");
 			authors.add("David A. Velasco");
@@ -207,7 +219,7 @@ public class MainForGUI extends Frame {
 			authors.add("Thorsten");
 			authors.add("jmiazga");
 			authors.add("masensio");
-			authors.add("zerginator");
+			authors.add("zerginator"); */
 			//to do 
 			JOptionPane.showMessageDialog(null, "save the object in filename.ser");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -218,11 +230,12 @@ public class MainForGUI extends Frame {
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(fileList);
 		         out.writeObject(authors);
+		         out.writeObject(commitsList);
 		         out.close();
 		         fileOut.close();
 			}
 		/*	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			 retrival=chooser.showSaveDialog(null);
+			 retrival=chooser.showSaveDialog(null); 
 			if(retrival == JFileChooser.APPROVE_OPTION){
 				File authSaveFile = chooser.getSelectedFile();
 				 FileOutputStream authorOut =new FileOutputStream(authSaveFile );
