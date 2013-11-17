@@ -97,8 +97,6 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			ArrayList<String> changes = new ArrayList<String>();
 			ArrayList<String> commits = new ArrayList<String>();
 
-			// @TODO try to figure out why there are some lines with missing
-			// fields
 			if (pre_check_line(currentCommit, currentAuthor,
 					result.getString(i))) {
 				changes.add(currentAuthor.getName());
@@ -136,15 +134,25 @@ public class RepoFile implements Iterable<Line>, Serializable {
 						if (!changesLog.get(start).equals(changesStr)) {
 							changesLog.put(start, changesStr);
 							for (int i = start; i < end; ++i) {
-								lineChanges.get(i).add(oldAuthor.getName());
-								lineCommits.get(i).add(oldCommit.getName());
+								// check last element and add if not the same commit
+								if (!lineCommits.get(i)
+										.get(lineCommits.get(i).size() - 1)
+										.equals(oldCommit.getName())) {
+									lineChanges.get(i).add(oldAuthor.getName());
+									lineCommits.get(i).add(oldCommit.getName());
+								}
 							}
 						}
 					} else {
 						changesLog.put(start, changesStr);
 						for (int i = start; i < end; ++i) {
-							lineChanges.get(i).add(oldAuthor.getName());
-							lineCommits.get(i).add(oldCommit.getName());
+							// check last element and add if not the same commit
+							if (!lineCommits.get(i)
+									.get(lineCommits.get(i).size() - 1)
+									.equals(oldCommit.getName())) {
+								lineChanges.get(i).add(oldAuthor.getName());
+								lineCommits.get(i).add(oldCommit.getName());
+							}
 						}
 					}
 				}
@@ -179,7 +187,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * Helper method to list the differences in a file between two points in time
+	 * Helper method to list the differences in a file between two points in
+	 * time
 	 */
 	private EditList getEditList(RawText textOld, RawText textNew)
 			throws GitAPIException, IOException {
@@ -220,7 +229,7 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * creates an iterable Line Object 
+	 * creates an iterable Line Object
 	 */
 	public Iterator<Line> iterator() {
 		return lines.iterator();
@@ -248,7 +257,7 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * Helper method that compares two RepoFiles 
+	 * Helper method that compares two RepoFiles
 	 */
 	public static class Comparators {
 
