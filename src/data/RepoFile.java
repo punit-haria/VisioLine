@@ -134,10 +134,19 @@ public class RepoFile implements Iterable<Line>, Serializable {
 						if (!changesLog.get(start).equals(changesStr)) {
 							changesLog.put(start, changesStr);
 							for (int i = start; i < end; ++i) {
-								// check last element and add if not the same commit
-								if (!lineCommits.get(i)
-										.get(lineCommits.get(i).size() - 1)
-										.equals(oldCommit.getName())) {
+								// check last element and add if not the same
+								// commit
+								if (lineCommits.get(i).size() > 0) {
+									if (!lineCommits.get(i)
+											.get(lineCommits.get(i).size() - 1)
+											.equals(oldCommit.getName())) {
+										lineChanges.get(i).add(
+												oldAuthor.getName());
+										lineCommits.get(i).add(
+												oldCommit.getName());
+									}
+								}
+								else{
 									lineChanges.get(i).add(oldAuthor.getName());
 									lineCommits.get(i).add(oldCommit.getName());
 								}
@@ -147,9 +156,15 @@ public class RepoFile implements Iterable<Line>, Serializable {
 						changesLog.put(start, changesStr);
 						for (int i = start; i < end; ++i) {
 							// check last element and add if not the same commit
-							if (!lineCommits.get(i)
-									.get(lineCommits.get(i).size() - 1)
-									.equals(oldCommit.getName())) {
+							if (lineCommits.get(i).size() > 0) {
+								if (!lineCommits.get(i)
+										.get(lineCommits.get(i).size() - 1)
+										.equals(oldCommit.getName())) {
+									lineChanges.get(i).add(oldAuthor.getName());
+									lineCommits.get(i).add(oldCommit.getName());
+								}
+							}
+							else{
 								lineChanges.get(i).add(oldAuthor.getName());
 								lineCommits.get(i).add(oldCommit.getName());
 							}
@@ -181,7 +196,6 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			// if can make a line make it
 			lines.add(new Line(lineCommits.get(i), lineChanges.get(i), i,
 					result.getString(i), type));
-			// TODO add correct line type\
 		}
 		return lines;
 	}
@@ -199,7 +213,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * Returns the raw text of a file from a specific commit
+	 * Returns the raw text of a file from a specific commit Also set blamer
+	 * object to be associated with that RevCommit
 	 */
 	private RawText getText(BlameCommand blamer, RevCommit commit)
 			throws GitAPIException {
@@ -216,6 +231,7 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	private boolean pre_check_line(RevCommit currentCommit,
 			PersonIdent currentAuthor, String string) {
 		if (currentCommit == null || currentAuthor == null || string == null) {
+			System.out.println("missing line");
 			return false;
 		} else
 			return true;
