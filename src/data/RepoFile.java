@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.eclipse.jgit.api.BlameCommand;
@@ -75,19 +75,12 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		BlameResult blame = blamer.call();
 		RawText result = blame.getResultContents();
 
-		// getting number of changes information
-		RevWalk revWalk = new RevWalk(repo);
-		RevCommit root = revWalk.parseCommit(commitID);
-		revWalk.markStart(root);
-		revWalk.setTreeFilter(AndTreeFilter.create(PathFilter.create(fileName),
-				TreeFilter.ANY_DIFF));
-
 		// variable for storing changes information
 		ArrayList<ArrayList<String>> lineChanges = new ArrayList<ArrayList<String>>(
 				result.size());
 		ArrayList<ArrayList<String>> lineCommits = new ArrayList<ArrayList<String>>(
 				result.size());
-		HashMap<Integer, String> changesLog = new HashMap<Integer, String>();
+		ArrayList<HashSet<String>> changesLog = new ArrayList<HashSet<String>>();
 
 		// initialize
 		for (int i = 0; i < result.size(); ++i) {
@@ -96,80 +89,72 @@ public class RepoFile implements Iterable<Line>, Serializable {
 
 			ArrayList<String> changes = new ArrayList<String>();
 			ArrayList<String> commits = new ArrayList<String>();
+			HashSet<String> addedCommits = new HashSet<String>();			
 
 			if (pre_check_line(currentCommit, currentAuthor,
 					result.getString(i))) {
 				changes.add(currentAuthor.getName());
 				commits.add(currentCommit.getName());
+				addedCommits.add(currentCommit.getName());
+			} else {
+				System.out.println(i);
 			}
-
 			lineChanges.add(changes);
 			lineCommits.add(commits);
+			changesLog.add(addedCommits);
 		}
+
+		// getting number of changes information
+		RevWalk revWalk = new RevWalk(repo);
+		RevCommit root = revWalk.parseCommit(commitID);
+		revWalk.markStart(root);
+		revWalk.setTreeFilter(AndTreeFilter.create(PathFilter.create(fileName),
+				TreeFilter.ANY_DIFF));
 
 		for (RevCommit currentCommit : revWalk) {
 			commitNum++;
-			RawText text = getText(blamer, currentCommit);
+			
+			// text for older elements
+			blamer.setStartCommit(currentCommit);
+			BlameResult blameOld = blamer.call();
+			
+			if(blameOld == null)
+			{
+				System.out.println("Cannot blame file: " + fileName + " for Commit: " + currentCommit.getName());
+				continue;
+			}
+			RawText text = blameOld.getResultContents();
+			
 			// old new
 			EditList diffList = getEditList(text, result);
 
 			for (Edit edits : diffList) {
-				int start = edits.getBeginB();
-				int end = edits.getEndB();
-				int startOld = edits.getBeginA();
-				int endOld = edits.getEndA();
-
-				PersonIdent oldAuthor = blame.getSourceAuthor(startOld);
-				RevCommit oldCommit = blame.getSourceCommit(startOld);
-
-				if (pre_check_line(oldCommit, oldAuthor,
-						text.getString(startOld))) {
-
-					String changesStr = "";
-					for (int i = startOld; i < endOld; ++i) {
-						changesStr = changesStr + text.getString(i) + "\n";
+				final int start = edits.getBeginB();
+				final int end = edits.getEndB();
+				final int startOld = edits.getBeginA();
+				final int endOld = edits.getEndA();
+				
+				int indexOld = startOld;
+				for (int i = start; i < end; ++i) {
+					if (endOld <= indexOld) {
+						break;
 					}
-
-					if (changesLog.containsKey(start)) {
-						if (!changesLog.get(start).equals(changesStr)) {
-							changesLog.put(start, changesStr);
-							for (int i = start; i < end; ++i) {
-								// check last element and add if not the same
-								// commit
-								if (lineCommits.get(i).size() > 0) {
-									if (!lineCommits.get(i)
-											.get(lineCommits.get(i).size() - 1)
-											.equals(oldCommit.getName())) {
-										lineChanges.get(i).add(
-												oldAuthor.getName());
-										lineCommits.get(i).add(
-												oldCommit.getName());
-									}
-								}
-								else{
-									lineChanges.get(i).add(oldAuthor.getName());
-									lineCommits.get(i).add(oldCommit.getName());
-								}
-							}
-						}
-					} else {
-						changesLog.put(start, changesStr);
-						for (int i = start; i < end; ++i) {
-							// check last element and add if not the same commit
-							if (lineCommits.get(i).size() > 0) {
-								if (!lineCommits.get(i)
-										.get(lineCommits.get(i).size() - 1)
-										.equals(oldCommit.getName())) {
-									lineChanges.get(i).add(oldAuthor.getName());
-									lineCommits.get(i).add(oldCommit.getName());
-								}
-							}
-							else{
-								lineChanges.get(i).add(oldAuthor.getName());
-								lineCommits.get(i).add(oldCommit.getName());
-							}
-						}
+//					System.out.println(text.size() + " " + endOld + " " + indexOld);
+//					System.out.println(text.getString(indexOld));
+					RevCommit oldCommit = blameOld.getSourceCommit(indexOld);
+					if (oldCommit == null) {
+						break;
 					}
+					PersonIdent oldAuthor = oldCommit.getAuthorIdent();
+
+					// check last element and add if not the same
+					// commit
+					if (!changesLog.get(i).contains(oldCommit.getName())) {
+						changesLog.get(i).add(oldCommit.getName());
+						lineChanges.get(i).add(oldAuthor.getName());
+						lineCommits.get(i).add(oldCommit.getName());
+					}
+					indexOld++;
 				}
 			}
 		}
@@ -213,25 +198,12 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	}
 
 	/*
-	 * Returns the raw text of a file from a specific commit Also set blamer
-	 * object to be associated with that RevCommit
-	 */
-	private RawText getText(BlameCommand blamer, RevCommit commit)
-			throws GitAPIException {
-		// text for older elements
-		blamer.setFilePath(fileName);
-		blamer.setStartCommit(commit);
-		BlameResult result = blamer.call();
-		return result.getResultContents();
-	}
-
-	/*
 	 * Check line for correctness to prevent errors
 	 */
 	private boolean pre_check_line(RevCommit currentCommit,
 			PersonIdent currentAuthor, String string) {
 		if (currentCommit == null || currentAuthor == null || string == null) {
-			System.out.println("missing line");
+			// System.out.println("missing line");
 			return false;
 		} else
 			return true;
