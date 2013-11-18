@@ -141,13 +141,17 @@ public class Visualizer extends PApplet {
 			}
 			for(Colour c : Colour.values()){
 				int originalColor = c.get();
+				String hexVal = Integer.toHexString(originalColor);
 				for(int i = perColor; i > 1; i--){
 					int offset = (int)(Colour.offset()*((double)i/perColor));
 					//int offset = (int)(Colour.offset());
 					int currentColor = originalColor;
 					for(int j = 4; j >= 0; j -= 2){
-						int temp = Math.max(((int)Math.pow(0x10,j))*offset,0x0);
-						currentColor -= temp;
+						int componentVal = Integer.parseInt(hexVal.substring(6-j,6-j+2),16);
+						if(componentVal >= offset){
+							int temp = Math.max(((int)Math.pow(0x10,j))*offset,0x0);
+							currentColor -= temp;
+						}
 					}
 					requiredColors.add(currentColor);
 				}
@@ -168,6 +172,7 @@ public class Visualizer extends PApplet {
 			String author = authIter.next();
 			Integer colr = colorIter.next();
 			authorColorScheme.put(author,colr);
+			System.out.println(Integer.toHexString(colr));
 		}
 	}
 

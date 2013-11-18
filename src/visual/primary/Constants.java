@@ -70,7 +70,7 @@ class Constants {
 		
 		private int hexVal;
 		//offset to adjust primary colours by (to extend colour library)
-		private static int offset = 0x15;
+		private static int offset = 0x25;
 		
 		private Colour(int value){
 			this.hexVal = value;
