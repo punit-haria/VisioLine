@@ -69,13 +69,13 @@ public class Line implements Serializable {
 	 * Ordered by newest first
 	 */
 	public ListIterator<String> getAuthors() {
-		return authors.listIterator();
+		return authors.listIterator(authors.size());
 	}
 
 	/* Get a list of commit Ids
 	 * Ordered by newest first
 	 */
 	public ListIterator<String> getCommitIds() {
-		return commits.listIterator();
+		return commits.listIterator(commits.size());
 	}
 }
