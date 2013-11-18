@@ -49,11 +49,12 @@ public class Visualizer extends PApplet {
 		this.currTime = listOfCommitIds.size();
 		this.prevTime = listOfCommitIds.size();
 		this.totalTime = listOfCommitIds.size();
-		this.timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
+		this.timePos = listOfCommitIds.listIterator();
 		this.commitSet = new HashSet<String>();
 		Iterator<String> iter = listOfCommitIds.iterator();
 		while(iter.hasNext()){
-			commitSet.add(iter.next());
+			String id = iter.next();
+			commitSet.add(id);
 		}
 	}
 	
@@ -95,20 +96,20 @@ public class Visualizer extends PApplet {
 		int diff = prevTime - currTime;
 		if(diff > 0){
 			for(int i = 0; i < diff; i++){
-				if(timePos.hasPrevious()){
-					String t = timePos.previous();
+				if(timePos.hasNext()){
+					String t = timePos.next();
 					commitSet.remove(t);
 				}
-				else timePos = listOfCommitIds.listIterator();
+				else timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
 			}
 		}
 		else if(diff < 0){
 			for(int i = -diff; i > 0; i--){
-				if(timePos.hasNext()){
-					String t = timePos.next();
+				if(timePos.hasPrevious()){
+					String t = timePos.previous();
 					commitSet.add(t);
 				}
-				else timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
+				else timePos = listOfCommitIds.listIterator();
 			}
 		}
 		prevTime = currTime;		
@@ -172,7 +173,6 @@ public class Visualizer extends PApplet {
 			String author = authIter.next();
 			Integer colr = colorIter.next();
 			authorColorScheme.put(author,colr);
-			System.out.println(Integer.toHexString(colr));
 		}
 	}
 
