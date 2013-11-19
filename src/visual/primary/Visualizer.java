@@ -96,8 +96,8 @@ public class Visualizer extends PApplet {
 		int diff = prevTime - currTime;
 		if(diff > 0){
 			for(int i = 0; i < diff; i++){
-				if(timePos.hasNext()){
-					String t = timePos.next();
+				if(timePos.hasPrevious()){
+					String t = timePos.previous();
 					commitSet.remove(t);
 				}
 				else timePos = listOfCommitIds.listIterator(listOfCommitIds.size());
@@ -105,8 +105,8 @@ public class Visualizer extends PApplet {
 		}
 		else if(diff < 0){
 			for(int i = -diff; i > 0; i--){
-				if(timePos.hasPrevious()){
-					String t = timePos.previous();
+				if(timePos.hasNext()){
+					String t = timePos.next();
 					commitSet.add(t);
 				}
 				else timePos = listOfCommitIds.listIterator();
