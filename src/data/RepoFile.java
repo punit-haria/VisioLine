@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -76,28 +79,30 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		RawText result = blame.getResultContents();
 
 		// variable for storing changes information
-		ArrayList<ArrayList<String>> lineChanges = new ArrayList<ArrayList<String>>(
+		ArrayList<TreeMap<Date, String>> lineChanges = new ArrayList<TreeMap<Date, String>>(
 				result.size());
-		ArrayList<ArrayList<String>> lineCommits = new ArrayList<ArrayList<String>>(
+		ArrayList<TreeMap<Date, String>> lineCommits = new ArrayList<TreeMap<Date, String>>(
 				result.size());
 		ArrayList<HashSet<String>> changesLog = new ArrayList<HashSet<String>>();
 
 		// initialize
 		for (int i = 0; i < result.size(); ++i) {
 			RevCommit currentCommit = blame.getSourceCommit(i);
-			PersonIdent currentAuthor = blame.getSourceAuthor(i);
+			PersonIdent currentAuthor = blame.getSourceCommitter(i);
 
-			ArrayList<String> changes = new ArrayList<String>();
-			ArrayList<String> commits = new ArrayList<String>();
-			HashSet<String> addedCommits = new HashSet<String>();			
+			TreeMap<Date, String> changes = new TreeMap<Date, String>();
+			TreeMap<Date, String> commits = new TreeMap<Date, String>();
+			HashSet<String> addedCommits = new HashSet<String>();
 
 			if (pre_check_line(currentCommit, currentAuthor,
 					result.getString(i))) {
-				changes.add(currentAuthor.getName());
-				commits.add(currentCommit.getName());
+				Date date = currentAuthor.getWhen();
+				changes.put(date, currentAuthor.getName());
+				commits.put(date, currentCommit.getName());
 				addedCommits.add(currentCommit.getName());
 			} else {
-				System.out.println(i);
+				System.out.println("missing line info: " + i + " for: "
+						+ commitID.getName());
 			}
 			lineChanges.add(changes);
 			lineCommits.add(commits);
@@ -113,18 +118,18 @@ public class RepoFile implements Iterable<Line>, Serializable {
 
 		for (RevCommit currentCommit : revWalk) {
 			commitNum++;
-			
+
 			// text for older elements
 			blamer.setStartCommit(currentCommit);
 			BlameResult blameOld = blamer.call();
-			
-			if(blameOld == null)
-			{
-				System.out.println("Cannot blame file: " + fileName + " for Commit: " + currentCommit.getName());
+
+			if (blameOld == null) {
+				System.out.println("Cannot blame file: " + fileName
+						+ " for commit: " + currentCommit.getName());
 				continue;
 			}
 			RawText text = blameOld.getResultContents();
-			
+
 			// old new
 			EditList diffList = getEditList(text, result);
 
@@ -133,26 +138,27 @@ public class RepoFile implements Iterable<Line>, Serializable {
 				final int end = edits.getEndB();
 				final int startOld = edits.getBeginA();
 				final int endOld = edits.getEndA();
-				
+
 				int indexOld = startOld;
 				for (int i = start; i < end; ++i) {
 					if (endOld <= indexOld) {
 						break;
 					}
-//					System.out.println(text.size() + " " + endOld + " " + indexOld);
-//					System.out.println(text.getString(indexOld));
 					RevCommit oldCommit = blameOld.getSourceCommit(indexOld);
 					if (oldCommit == null) {
+						System.out.println("missing line info: " + i + " for: "
+								+ currentCommit.getName());
 						break;
 					}
-					PersonIdent oldAuthor = oldCommit.getAuthorIdent();
-
+					PersonIdent oldAuthor = blameOld.getSourceCommitter(indexOld);
+					Date date = oldAuthor.getWhen();
+					
 					// check last element and add if not the same
 					// commit
 					if (!changesLog.get(i).contains(oldCommit.getName())) {
 						changesLog.get(i).add(oldCommit.getName());
-						lineChanges.get(i).add(oldAuthor.getName());
-						lineCommits.get(i).add(oldCommit.getName());
+						lineChanges.get(i).put(date, oldAuthor.getName());
+						lineCommits.get(i).put(date, oldCommit.getName());
 					}
 					indexOld++;
 				}
@@ -179,8 +185,9 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			}
 
 			// if can make a line make it
-			lines.add(new Line(lineCommits.get(i), lineChanges.get(i), i,
-					result.getString(i), type));
+			lines.add(new Line(new ArrayList<String>(lineCommits.get(i).values()),
+					new ArrayList<String>(lineChanges.get(i).values()), i, result
+							.getString(i), type));
 		}
 		return lines;
 	}
