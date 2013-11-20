@@ -180,7 +180,7 @@ public class MainForGUI extends Frame {
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
 			
 			//for(RevCommit commit:commits){
-			int count = 15;
+			int count = 22;
 			
 			for(String s:files){				
 				if(count > 0) count --;

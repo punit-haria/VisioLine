@@ -139,14 +139,12 @@ public class Visualizer extends PApplet {
 			int perColor = (int)Math.ceil((double)numAuthors/numColors);
 			for(Colour c : Colour.values()){
 				requiredColors.add(c.get());
-			}
-			for(Colour c : Colour.values()){
-				int originalColor = c.get();
-				String hexVal = Integer.toHexString(originalColor);
-				for(int i = perColor; i > 1; i--){
+			}			
+			for(int i = perColor; i > 1; i--){
+				for(Colour c : Colour.values()){
+					int currentColor = c.get();
+					String hexVal = Integer.toHexString(currentColor);
 					int offset = (int)(Colour.offset()*((double)i/perColor));
-					//int offset = (int)(Colour.offset());
-					int currentColor = originalColor;
 					for(int j = 4; j >= 0; j -= 2){
 						int componentVal = Integer.parseInt(hexVal.substring(6-j,6-j+2),16);
 						if(componentVal >= offset){

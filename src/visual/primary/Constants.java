@@ -58,19 +58,19 @@ class Constants {
 	public static int white = 0xFFFFFFFF;
 	
 	//author colors enum
-	public enum Colour {
-		RED(0xFFFF0000),
-		BLUE(0xFF1B1BB3),
-		GREEN(0xFF00CC00),
-		YELLOW(0xFFFFFF00),
-		PURPLE(0xFF7109AA),	
-		PINK(0xFFE93A90),
-		ORANGE(0xFFFF9000),
-		LIME(0xFFCCF600);
+	public enum Colour {	
+		GREENTRANS(0xCC00FF00),
+		REDTRANS(0xCCFF0000),		
+		CYAN(0xDD00FFFF),
+		//ORANGE(0xFFFFD68D),		
+		PINK(0xCCFF3D98),
+		BLUETRANS(0xA10000FF),
+		YELLOW(0xCCFFFF00),
+		LIME(0xFFBCF600);
 		
 		private int hexVal;
 		//offset to adjust primary colours by (to extend colour library)
-		private static int offset = 0x25;
+		private static int offset = 0x95;
 		
 		private Colour(int value){
 			this.hexVal = value;
