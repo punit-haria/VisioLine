@@ -185,6 +185,9 @@ public class MainForGUI extends Frame {
 			for(String s:files){				
 				//if(count > 0) count --;
 				//else break;
+
+//				if(count > 0) count --;
+//				else break;
 				
 				System.out.println(s);
 				//HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
@@ -195,6 +198,8 @@ public class MainForGUI extends Frame {
 					RepoFile rf=new RepoFile(rfm.getRepo(), s, "HEAD" );
 					
 					//visualizer code
+					//if(!rf.getErrorStatus())
+					if(rf.getErrorScore() < 10)
 					fileList.add(rf);
 				//}				
 					

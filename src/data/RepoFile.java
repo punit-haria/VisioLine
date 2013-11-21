@@ -41,8 +41,10 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	private String fileName;
 	private String commitId;
 	private int commitNum;
+	private boolean errorDectected;
 	// change to whatever data structure is most suitable
 	private ArrayList<Line> lines;
+	private int errorScore;
 
 	/*
 	 * @param name is a the files relative path
@@ -58,6 +60,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 		this.fileName = name;
 		this.commitId = commitId;
 		commitNum = 0;
+		errorScore = 0;
+		errorDectected = false;
 		// create list of line objects
 		this.lines = populateLineInfo(repo);
 	}
@@ -103,6 +107,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			} else {
 				System.out.println("missing line info: " + i + " for: "
 						+ commitID.getName());
+				errorDectected = true;
+				errorScore++;
 			}
 			lineChanges.add(changes);
 			lineCommits.add(commits);
@@ -124,6 +130,8 @@ public class RepoFile implements Iterable<Line>, Serializable {
 			BlameResult blameOld = blamer.call();
 
 			if (blameOld == null) {
+				errorScore += 5;
+				errorDectected = true;
 				System.out.println("Cannot blame file: " + fileName
 						+ " for commit: " + currentCommit.getName());
 				continue;
@@ -146,8 +154,10 @@ public class RepoFile implements Iterable<Line>, Serializable {
 					}
 					RevCommit oldCommit = blameOld.getSourceCommit(indexOld);
 					if (oldCommit == null) {
+						errorScore++;
 						System.out.println("missing line info: " + i + " for: "
 								+ currentCommit.getName());
+						errorDectected = true;
 						break;
 					}
 					PersonIdent oldAuthor = blameOld.getSourceCommitter(indexOld);
@@ -250,6 +260,22 @@ public class RepoFile implements Iterable<Line>, Serializable {
 	public String getCommitId() {
 		return commitId;
 	}
+	
+	/*
+	 * return if error was detected when processing file
+	 */
+	public boolean getErrorStatus() {
+		return errorDectected;
+	}
+
+	/*
+	 * return integer representing the amount or errors detected when processing file
+	 */
+	public int getErrorScore() {
+		return errorScore;
+	}
+
+
 
 	/*
 	 * Helper method that compares two RepoFiles
