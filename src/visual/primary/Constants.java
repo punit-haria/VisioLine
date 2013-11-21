@@ -5,11 +5,11 @@ class Constants {
 	
 	//file display position
 	public static int fileDisplayStartX = 75;
-	public static int fileDisplayStartY = 50;
+	public static int fileDisplayStartY = 20;
 	//file bar
 	private static float lineStripeWidth = 5f;	
-	private static float fileBarSpacing = 50f;	
-	public static float lineStripeHeight= 400f;
+	private static float fileBarSpacing = 200f;	
+	public static float lineStripeHeight= 700f;
 	
 	public static float getLineStripeWidth(){
 		return lineStripeWidth*zoomRatio;
@@ -22,20 +22,20 @@ class Constants {
 	//horizontal scroll bar
 	public static int horizontalScrollBarOffset = 40;
 	public static int horizontalScrollBarX = 75;
-	public static int scrollBarWidth = 400;
+	public static int scrollBarWidth = 1200;
 	public static int scrollBarHeight = 20;
 	public static int scrollBarLooseness = 20;
 	//zoom
 	public static int zoomOffset = 40;
 	public static int zoomX = 75;
-	public static int zoomWidth = 400;
+	public static int zoomWidth = 1200;
 	public static int zoomHeight = 20;
 	public static int zoomLooseness = 20;
 	private static float zoomRatio = 1;
 	//timeline
 	public static int timeOffset = 40;
 	public static int timeX = 75;
-	public static int timeWidth = 400;
+	public static int timeWidth = 1200;
 	public static int timeHeight = 20;
 	public static int timeLooseness = 10;
 	private static float timeRatio = 1;
@@ -61,8 +61,7 @@ class Constants {
 	public enum Colour {	
 		GREENTRANS(0xCC00FF00),
 		REDTRANS(0xCCFF0000),		
-		CYAN(0xDD00FFFF),
-		//ORANGE(0xFFFFD68D),		
+		CYAN(0xDD00FFFF),	
 		PINK(0xCCFF3D98),
 		BLUETRANS(0xA10000FF),
 		YELLOW(0xCCFFFF00),
