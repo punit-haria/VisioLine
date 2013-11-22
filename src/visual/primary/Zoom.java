@@ -67,6 +67,10 @@ public class Zoom {
 		Constants.setZoomRatio(2*((spos - sposMin)/(sposMax - sposMin)));
 	}
 	
+	public float getSliderPos(){
+		return ((spos - sposMin)/(sposMax - sposMin));
+	}
+	
 	/**
 	 * Constrains val to be between minv and maxv.
 	 */

@@ -8,8 +8,8 @@ class Constants {
 	public static int fileDisplayStartY = 20;
 	//file bar
 	private static float lineStripeWidth = 5f;	
-	private static float fileBarSpacing = 200f;	
-	public static float lineStripeHeight= 700f;
+	private static float fileBarSpacing = 150f;	
+	public static float lineStripeHeight= 450f;
 	
 	public static float getLineStripeWidth(){
 		return lineStripeWidth*zoomRatio;

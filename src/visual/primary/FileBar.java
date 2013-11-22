@@ -75,8 +75,10 @@ public class FileBar {
 			offset += Constants.getLineStripeWidth();
 		}
 		//print file name
-		parent.fill(0);
-		parent.text(fileName,xx,yy+Constants.lineStripeHeight+10);
+		if(parent.zoomRatio() > 0.5){
+			parent.fill(0);
+			parent.text(fileName,xx,yy+Constants.lineStripeHeight+10);
+		}
 	}
 	
 	private class LineStripe {

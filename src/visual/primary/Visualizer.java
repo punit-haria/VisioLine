@@ -77,6 +77,10 @@ public class Visualizer extends PApplet {
 		timescroll = new TimeLine(Constants.timeX, toffset,
 				Constants.timeWidth, Constants.timeHeight, Constants.timeLooseness, this);
 	}
+	
+	public float zoomRatio(){
+		return hzoom.getSliderPos();
+	}
 
 	@Override
 	public void draw() {
