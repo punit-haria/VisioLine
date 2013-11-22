@@ -199,7 +199,7 @@ public class MainForGUI extends Frame {
 					
 					//visualizer code
 					//if(!rf.getErrorStatus())
-					if(rf.getErrorScore() < 10)
+					if(rf.getErrorScore() < 10 || rf.getFileName().equals("src/com/owncloud/android/authentication/AuthenticatorActivity.java"))
 					fileList.add(rf);
 				//}				
 					
