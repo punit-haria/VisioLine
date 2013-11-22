@@ -41,7 +41,7 @@ public class MainForGUI extends Frame {
 	{
 
 		// Set frame properties
-		setTitle("MainForGUI"); // Set the title
+		setTitle("VisioLine"); // Set the title
 		setSize(400,400); // Set size to the frame
 		//layout
 		this.setLayout(new BorderLayout());
