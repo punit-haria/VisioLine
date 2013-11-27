@@ -179,53 +179,13 @@ public class MainForGUI extends Frame {
 			//visualizer
 			ArrayList<RepoFile> fileList = new ArrayList<RepoFile>();
 			
-			//for(RevCommit commit:commits){
-			//int count = 22;
-			
 			for(String s:files){				
-				//if(count > 0) count --;
-				//else break;
-
-//				if(count > 0) count --;
-//				else break;
-				
 				System.out.println(s);
-				//HashSet<String> commitlastIds= RepoFileManager.getAlteringCommitIDs(rfm.getRepo(), s);
-
-				//for(String commit:commitlastIds) {
-					//System.out.println("this is th file relevant path "+s);
-					//System.out.println("this commitId is "+ commit); 
-					RepoFile rf=new RepoFile(rfm.getRepo(), s, "HEAD" );
-					
-					//visualizer code
-					//if(!rf.getErrorStatus())
-					if(rf.getErrorScore() < 10 || rf.getFileName().equals("src/com/owncloud/android/authentication/AuthenticatorActivity.java"))
+				RepoFile rf = new RepoFile(rfm.getRepo(), s, "HEAD");
+				if (rf.getErrorScore() < 10)
 					fileList.add(rf);
-				//}				
-					
 			}
 			
-/*	 ArrayList<String> authors = new ArrayList<String>();
-			
-			authors.add("Bartek Przybylski");
-			authors.add("David A. Velasco");
-			authors.add("Espen Fossen");
-			authors.add("F.T.");
-			authors.add("Jenkins for ownCloud");
-			authors.add("Jörg Thalheim");
-			authors.add("Lennart Rosam");
-			authors.add("Luke Owncloud");
-			authors.add("Matthias Baumann");
-			authors.add("Mik");
-			authors.add("Mik-");
-			authors.add("Sven Aßmann");
-			authors.add("Thomas Mueller");
-			authors.add("Thomas Müller");
-			authors.add("Thorsten");
-			authors.add("jmiazga");
-			authors.add("masensio");
-			authors.add("zerginator"); */
-			//to do 
 			JOptionPane.showMessageDialog(null, "save the object in filename.ser");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int retrival=chooser.showSaveDialog(null);
