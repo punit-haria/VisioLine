@@ -1,5 +1,8 @@
-package visual.primary;
+package visual;
 
+/**
+ * Primarily static class that stores visualization parameters for easy access.
+ */
 class Constants {
 	//absolute visualization dimensions:
 	
@@ -38,7 +41,6 @@ class Constants {
 	public static int timeWidth = 1200;
 	public static int timeHeight = 20;
 	public static int timeLooseness = 10;
-	private static float timeRatio = 1;
 	
 	public static void setZoomRatio(float x){
 		zoomRatio = x;

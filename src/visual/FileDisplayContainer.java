@@ -1,10 +1,12 @@
-package visual.primary;
+package visual;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import data.RepoFile;
 
-
+/**
+ * Manager for FileBars. (list of FileBars)
+ */
 public class FileDisplayContainer {
 	
 	//parent PApplet that we render onto
@@ -31,6 +33,7 @@ public class FileDisplayContainer {
 		}
 	}
 	
+	//Gets the display length of each FileBar
 	public float getLength(){
 		Iterator<FileBar> iter = files.iterator();
 		float length = 0f;
@@ -41,7 +44,7 @@ public class FileDisplayContainer {
 		return length;
 	}
 
-	// draw FileBars 
+	//code for drawing this object onto screen
 	public	void display(float xx, float yy) {
 		Iterator<FileBar> it = files.iterator();
 		float offset = 0;

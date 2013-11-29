@@ -1,7 +1,12 @@
-package visual.primary;
+package visual;
 
 import processing.core.PApplet;
 
+/**
+ * Object represents a slider for our timeline feature. Updates
+ * slider position variables to tell the visualization which
+ * line commits to show and which ones to hide.
+ */
 public class TimeLine {
 
 	private int swidth, sheight;    // width and height of bar
@@ -29,6 +34,9 @@ public class TimeLine {
 		loose = looseVal;
 	}
 	
+	/**
+	 * Display method onto PApplet.
+	 */
 	public void display() {
 		//update slider
 		over = overEvent();

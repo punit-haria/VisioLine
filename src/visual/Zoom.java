@@ -1,8 +1,11 @@
-package visual.primary;
+package visual;
 
 import processing.core.PApplet;
-import visual.primary.Constants;
+import visual.Constants;
 
+/**
+ * Class that allows zooming of the visualization horizontally.
+ */
 public class Zoom {
 
 	private int swidth, sheight;    // width and height of bar
@@ -30,6 +33,9 @@ public class Zoom {
 		loose = looseVal;
 	}
 	
+	/**
+	 * Display method onto PApplet.
+	 */
 	public void display() {
 		//update slider
 		over = overEvent();
@@ -61,12 +67,15 @@ public class Zoom {
 	}
 
 	/**
-	 * Returns value between 0 and 1 of sliders relative position on bar.
+	 * Update zoom ratio.
 	 */
 	public void updateZoomRatio() {
 		Constants.setZoomRatio(2*((spos - sposMin)/(sposMax - sposMin)));
 	}
 	
+	/**
+	 * Returns the slider position as a value between 0 and 1.
+	 */
 	public float getSliderPos(){
 		return ((spos - sposMin)/(sposMax - sposMin));
 	}

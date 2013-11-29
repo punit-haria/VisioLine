@@ -1,7 +1,11 @@
-package visual.primary;
+package visual;
 
 import processing.core.PApplet;
 
+/**
+ * Object representing the scrollbar for our visualization on display. Also reads input
+ * from the user as the slider is adjusted. 
+ */
 public class HorizontalScrollBar {
 
 	private int swidth, sheight;    // width and height of bar
@@ -29,6 +33,9 @@ public class HorizontalScrollBar {
 		loose = looseVal;
 	}
 	
+	/**
+	 * Display method onto PApplet.
+	 */
 	public void display() {
 		//update slider
 		over = overEvent();

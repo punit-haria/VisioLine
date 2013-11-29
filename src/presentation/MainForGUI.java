@@ -7,7 +7,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,10 +22,13 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import visual.primary.Visualizer;
+import visual.Visualizer;
 import data.RepoFile;
 import data.RepoFileManager;
 
+/**
+ * Presentation Layer - entry point class.
+ */
 @SuppressWarnings("serial")
 public class MainForGUI extends Frame {
 
@@ -37,6 +39,8 @@ public class MainForGUI extends Frame {
 	private ArrayList<RepoFile> repfiles;
 	private ArrayList<String> authorList;
 	private ArrayList<String> commitsList;
+	
+	//Initialize GUI components
 	public MainForGUI()
 	{
 
@@ -98,7 +102,8 @@ public class MainForGUI extends Frame {
 	}
 
 
-
+	//Initialize visualization.
+	@SuppressWarnings("unchecked")
 	protected void play() {
 		// TODO Auto-generated method stub
 		FileInputStream fileIn;
@@ -119,19 +124,6 @@ public class MainForGUI extends Frame {
 	        file_in.close();
 	        fileIn.close();
 			}
-			/* chooser = new JFileChooser();
-			chooser.setDialogTitle("Select target directory");
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			 returnVal = chooser.showOpenDialog(new Frame());
-			if(returnVal == JFileChooser.APPROVE_OPTION) {
-				File author_out_File = chooser.getSelectedFile();
-		fileIn = new FileInputStream(author_out_File);
-			 
-			ObjectInputStream author_in = new ObjectInputStream(fileIn);
-	        authorList = (ArrayList<String>) author_in.readObject();
-	        author_in.close();
-	        fileIn.close();
-			}*/
 			
 	    	Visualizer vis = new Visualizer(authorList,repfiles,commitsList);
 			this.add(vis,BorderLayout.CENTER);
@@ -144,8 +136,7 @@ public class MainForGUI extends Frame {
 		
 	}
 
-
-
+	//Load OwnCloud repository data from local disk.
 	protected void loadData() {
 		// TODO Auto-generated method stub
 		JFileChooser chooser = new JFileChooser();
@@ -198,20 +189,7 @@ public class MainForGUI extends Frame {
 		         out.writeObject(commitsList);
 		         out.close();
 		         fileOut.close();
-			}
-		/*	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			 retrival=chooser.showSaveDialog(null); 
-			if(retrival == JFileChooser.APPROVE_OPTION){
-				File authSaveFile = chooser.getSelectedFile();
-				 FileOutputStream authorOut =new FileOutputStream(authSaveFile );
-				         ObjectOutputStream a_out = new ObjectOutputStream(authorOut);
-				        a_out.writeObject(authors);
-				         a_out.close();
-				         authorOut.close();
-				        
-			}
-		        */
-		     
+			}		     
 					
 		} catch (RevisionSyntaxException | GitAPIException | IOException e) {
 			// TODO Auto-generated catch block
@@ -222,12 +200,10 @@ public class MainForGUI extends Frame {
 	}
 
 
-
+	//Entry point
 	public static void main(String args[])
 	{
-		new MainForGUI();
-		
-		
+		new MainForGUI();		
 	}
 
 }

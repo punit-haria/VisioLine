@@ -1,4 +1,4 @@
-package visual.primary;
+package visual;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,15 +6,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-import data.Line;
 import data.RepoFile;
 
 import processing.core.*;
-import visual.primary.Constants;
-import visual.primary.Constants.Colour;
-import visual.primary.HorizontalScrollBar;
-import visual.primary.Zoom;
+import visual.Constants;
+import visual.Constants.Colour;
+import visual.HorizontalScrollBar;
+import visual.Zoom;
 
+/**
+ * Central class for the visualization logic layer.
+ */
 @SuppressWarnings("serial")
 public class Visualizer extends PApplet {
 	

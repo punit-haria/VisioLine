@@ -1,4 +1,4 @@
-package visual.primary;
+package visual;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +7,10 @@ import java.util.ListIterator;
 import data.RepoFile;
 import data.Line;
 
+/**
+ * Represents the required visualization variables of
+ * a single source file from the OwnCloud repository.
+ */
 public class FileBar {
 	
 	//parent PApplet that we render onto
@@ -64,7 +68,7 @@ public class FileBar {
 		absoluteHeight = h;
 	}
 
-	// draw bar
+	//code for drawing this object onto screen
 	public void display(float xx, float yy) {
 		parent.noStroke();
 		Iterator<LineStripe> it = stripes.iterator();
@@ -81,6 +85,9 @@ public class FileBar {
 		}
 	}
 	
+	/**
+	 * Class representing a single line on display.
+	 */
 	private class LineStripe {
 		
 		//segments that make up this line
@@ -100,6 +107,7 @@ public class FileBar {
 			}
 		}	
 		
+		//code for drawing this object onto screen
 		private void display(float xx, float yy){
 			Iterator<Segment> iter = segs.iterator();
 			while(iter.hasNext()){
@@ -108,6 +116,9 @@ public class FileBar {
 			}
 		}
 		
+		/**
+		 * Class representing a single line commit on display.
+		 */
 		private class Segment {
 			
 			//hexadecimal valued color
@@ -123,6 +134,7 @@ public class FileBar {
 				this.commitId = commit;
 			}
 
+			//code for drawing this object onto screen
 			private void display(float xx, float yy){
 				if(parent.isCommitIdValid(commitId)){
 					parent.fill(lineColor);
