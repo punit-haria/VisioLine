@@ -1,6 +1,6 @@
-#VisioLine
+# VisioLine
 
-####A visualization tool for understanding per line static attributes of a Git code repository.
+#### A visualization tool for understanding per line static attributes of a Git code repository.
 
 With Visioline, we are visually representing per file and per line contributions to a code repository (based on Git commits). We do this by examining the annotation data of each line of code for each node in the commit tree. We can view this chronologically, showing the changes that happen over time. 
 
